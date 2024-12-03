@@ -26,12 +26,12 @@ function Home(props){
         try{
             const data = await validateUser(email, password);
             console.log("validated");
-            ctx.auth(email, password, "TEST");
-            setInfo( data.data[0].isbn10 )
-            setStat(data.status)
-            setStatMsg(data.statusText)
-            setAuthIssue("AUTH");
-            console.log(data.data)
+            const information = data.data[0]
+            if(data.data[0].length == 0){
+                setAuthIssue("USERNAME or PASSWORD incorrect");
+            }else{
+                ctx.auth(email,password,data.data[2].isManager)
+            }
         }catch(error){
             setAuthIssue("AUTHISSUE");
             console.log("UNABLE TO AUTHENTICATE TRY AGAIN: "+error)

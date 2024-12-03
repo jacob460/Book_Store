@@ -9,7 +9,7 @@ async function auth(username, fname, lname, password, addr, phoneNum, action){
     console.log("CALLING AUTH");
 
     const result = await axios.get(url, {params: {username, fname, lname, password, addr, phoneNum}});
-
+    console.log(result)
     return result;
 }
 

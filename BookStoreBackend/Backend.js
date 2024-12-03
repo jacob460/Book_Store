@@ -1,5 +1,14 @@
 import mysql from 'mysql2';
-
+/**
+ * customers
+ * customers
+ * 
+ * supermanager
+ * password
+ * 
+ * root
+ * Mechromancer1427
+ */
 var pool
     /*var pool = mysql.createPool({
         host: "localhost",
@@ -10,14 +19,24 @@ var pool
         console.log(error)
     */
 export async function tryConnection(username, password){
+    var test
     pool = mysql.createPool({
         host: "localhost",
-        user: username,
-        password: password,
+        user: "supermanager",
+        password: "password",
         database: "bookstore", 
     }).promise();
     
-    const test = pool.query("SHOW GRANTS FOR " + username + "@localhost");
+    //const test = pool.query(`SELECT * FROM customers WHERE username=\"${username}\" AND password=\"${password}\"` );
+        test = await pool.query(`SELECT * FROM customers WHERE username=\"${username}\" AND password=\"${password}\"` );
+        console.log(test[0].length)
+    if(test[0].length == 0){
+        test = await pool.query(`SELECT * FROM managers WHERE username=\"${username}\" AND password=\"${password}\"` );
+        test.push({isManager:true})
+    }else{
+        test.push({isManager:false})
+    }
+        console.log(test[0].length)
     //const test = queryBookstore("SELECT * FROM bookdata LIMIT 15")
 
     return(test)
@@ -44,6 +63,14 @@ export async function createUser(username, fname, lname, password, addr, phoneNu
 
 
 export async function queryBookstore(query){
+
+    pool = mysql.createPool({
+        host: "127.0.0.1",
+        user: "root",
+        password: "Mechromancer1427",
+        database: "bookstore", 
+    }).promise();
+
     const result = await pool.query(query);
     //console.log(result[0]);
     return(result);

@@ -33,6 +33,11 @@ app.get('/signUp', async (req, res)=>{
     res.send(result)
 })
 
+app.get('/bookList', async (req, res)=>{
+    const result = await queryBookstore("SELECT * FROM bookdata LIMIT 15");
+    res.send(result)
+})
+
 app.use((err, req, next) => {
     //console.error(err.stack);
     //resizeBy.status(500).send('something broke!')

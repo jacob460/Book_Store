@@ -1,7 +1,6 @@
 import { Text, View, StyleSheet, Button } from "react-native";
 import { AuthContext } from "../components/AuthContext";
 import { useContext, useState } from "react";
-import { doc, getDoc, getFirestore, collection, updateDoc } from "firebase/firestore";
 import FormField from "../components/FormField";
 
 function Welcome(){
@@ -29,11 +28,14 @@ function Welcome(){
     <View style={styles.container}>
         
         <Text style={styles.title}>Email: {ctx.email}</Text>
+        <Text style={styles.title}>Password: {ctx.password}</Text>
+        <Text style={styles.title}>Authorization: {ctx.manager}</Text>
         <Button title="Logout" onPress={handleLogout}/>
+        <Button title="Store" onPress={() => props.navigation.navigate("BookStore List")}/>
         {editInfo == true 
         ?   (<View style={{marginVertical:15,}}>
             <FormField label="First Name" secure={false} capitalize={"words"} textChange={setFname} info={ctx.email}></FormField>
-            <FormField label="Last Name" secure={false} capitalize={"words"} textChange={setLname} info={user?.lname}></FormField>
+            <FormField label="Last Name" secure={false} capitalize={"words"} textChange={setLname} info={ctx.password}></FormField>
             <FormField label="Age Name" secure={false} textChange={setAge} keyboard={"number-pad"} info={user?.age}></FormField>
             <View style={styles.buttons}>
                 <Button title={"Submit"} onPress={SubmitInfo}/>
