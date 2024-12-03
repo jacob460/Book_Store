@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "BookFront"
+		},
+		{
+			"path": "Book_Store"
+		},
+		{
+			"path": "Auth"
+		}
+	],
+	"settings": {}
+}
