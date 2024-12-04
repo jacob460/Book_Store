@@ -1,8 +1,8 @@
 import { createContext, useState } from "react";
 
 export const AuthContext = createContext({
-    password: "",
-    email: "",
+    username: "",
+    customerID: 0,
     manager: false,
     isAuth: false,
     auth: (token)=>{},
@@ -11,26 +11,26 @@ export const AuthContext = createContext({
 
 function AuthContextProvider({children}){
 
-    const [password, setPassword] = useState();
-    const [email, setEmail] = useState();
+    const [username, setUsername] = useState();
     const [manager, setManager] = useState();
+    const [customerID, setCustomerID] = useState();
 
-    function auth(email, password, manager){
-        console.log("AUTHCONTEXT: " + email + password + manager)
-        setPassword(password);
-        setEmail(email);
+    function auth(username, manager, customerID){
+        console.log("AUTHCONTEXT: " + username + manager)
+        setUsername(username);
         setManager(manager);
+        setCustomerID(customerID)
     }
     function logout(){
-        setPassword(null);
-        setEmail(null);
+        setUsername(null);
         setManager(null);
+        setCustomerID(null);
     }
     const value = {
-        password: password,
-        email: email,
+        username: username,
+        customerID: customerID,
         manager: manager,
-        isAuth: !!password,
+        isAuth: !!username,
         auth: auth,
         logout: logout,
     }

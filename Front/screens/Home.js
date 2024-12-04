@@ -27,10 +27,11 @@ function Home(props){
             const data = await validateUser(email, password);
             console.log("validated");
             const information = data.data[0]
+            console.log(information)
             if(data.data[0].length == 0){
                 setAuthIssue("USERNAME or PASSWORD incorrect");
             }else{
-                ctx.auth(email,password,data.data[2].isManager)
+                ctx.auth(email,data.data[2].isManager, data.data[0][0].customerID)
             }
         }catch(error){
             setAuthIssue("AUTHISSUE");

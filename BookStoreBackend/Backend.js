@@ -70,7 +70,7 @@ export async function queryBookstore(query){
         password: "Mechromancer1427",
         database: "bookstore", 
     }).promise();
-
+    console.log(query)
     const result = await pool.query(query);
     //console.log(result[0]);
     return(result);

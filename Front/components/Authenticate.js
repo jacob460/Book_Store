@@ -20,3 +20,4 @@ export function validateUser(username, password){
 export function createUser(username, fname, lname, password, addr, phoneNum){
     return auth(username, fname, lname, password, addr, phoneNum, "signUp")
 }
+

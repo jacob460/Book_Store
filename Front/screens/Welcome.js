@@ -3,7 +3,7 @@ import { AuthContext } from "../components/AuthContext";
 import { useContext, useState } from "react";
 import FormField from "../components/FormField";
 
-function Welcome(){
+function Welcome(props){
 
     const [user, setUser] = useState(null);
     const [editInfo, setEditInfo] = useState(false);
@@ -27,9 +27,8 @@ function Welcome(){
     return(
     <View style={styles.container}>
         
-        <Text style={styles.title}>Email: {ctx.email}</Text>
-        <Text style={styles.title}>Password: {ctx.password}</Text>
-        <Text style={styles.title}>Authorization: {ctx.manager}</Text>
+        <Text style={styles.title}>Username: {ctx.username}</Text>
+        <Text style={styles.title}>CustomerID: {ctx.customerID}</Text>
         <Button title="Logout" onPress={handleLogout}/>
         <Button title="Store" onPress={() => props.navigation.navigate("BookStore List")}/>
         {editInfo == true 

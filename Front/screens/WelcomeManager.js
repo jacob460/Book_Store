@@ -27,8 +27,8 @@ function WelcomeManager(props){
     return(
     <View style={styles.container}>
         
-        <Text style={styles.title}>Email: {ctx.email}</Text>
-        <Text style={styles.title}>Email: {ctx.password}</Text> 
+        <Text style={styles.title}>username: {ctx.username}</Text>
+        <Text style={styles.title}>customerID: {ctx.customerID}</Text> 
         <Button title="Logout" onPress={handleLogout}/>
         <Button title="Dashboard" onPress={() => props.navigation.navigate("Dashboard")}/>
         <Button title="Store" onPress={() => props.navigation.navigate("BookStore List")}/>

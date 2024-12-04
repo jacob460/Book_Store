@@ -13,6 +13,7 @@ import Register from './screens/Register';
 import WelcomeManager from './screens/WelcomeManager';
 import manDashboard from './screens/ManDashboard';
 import BookList from './screens/BookList';
+import BookData from './screens/BookData';
 import { useContext } from 'react';
 import AuthContextProvider from './components/AuthContext';
 import { AuthContext } from './components/AuthContext';
@@ -25,6 +26,7 @@ function ManAuthStack(){
       <Stack.Screen name="WelcomeManager" component={WelcomeManager}/>
       <Stack.Screen name="Dashboard" component={manDashboard}/>
       <Stack.Screen name="BookStore List" component={BookList}/>
+      <Stack.Screen name="BookData" component={BookData}/>
     </Stack.Navigator>);
 }
 
@@ -33,6 +35,7 @@ function AuthStack(){
   <Stack.Navigator initialRouteName="Welcome">
     <Stack.Screen name="Welcome" component={Welcome}/>
     <Stack.Screen name="BookStore List" component={BookList}/>
+    <Stack.Screen name="BookData" component={BookData}/>
   </Stack.Navigator>);
 }
 function PreAuthStack(){
@@ -64,10 +67,6 @@ function Navigation(){
       </NavigationContainer>)
     }
   }
-  /*return( <NavigationContainer>
-    { ctx.isAuth ? (<AuthStack/>) : (<PreAuthStack/>)}
-</NavigationContainer>);
-*/
 }
 
 export default function App() {
@@ -79,12 +78,3 @@ export default function App() {
     </AuthContextProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'blue',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
