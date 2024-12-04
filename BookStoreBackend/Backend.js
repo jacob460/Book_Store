@@ -61,6 +61,23 @@ export async function createUser(username, fname, lname, password, addr, phoneNu
 
 }
 
+export async function createManager(username, fname, lname, password, addr, phoneNum){
+    pool = mysql.createPool({
+        host: "127.0.0.1",
+        user: "root",
+        password: "Mechromancer1427",
+        database: "bookstore", 
+    }).promise();
+    console.log("CREATE MANAGER:")
+    console.log(username);
+    console.log(password);
+    console.log(addr);
+    console.log(fname);
+    console.log(lname);
+    console.log(phoneNum);
+    const test = pool.query(`insert into managers (username, fname, lname, password, address, phoneNumber)values (\"${username}\", \"${fname}\", \"${lname}\", \"${password}\", \"${addr}\", \"${phoneNum}\")`);
+    return(test)
+}
 
 export async function queryBookstore(query){
 

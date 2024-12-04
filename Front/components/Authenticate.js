@@ -21,3 +21,6 @@ export function createUser(username, fname, lname, password, addr, phoneNum){
     return auth(username, fname, lname, password, addr, phoneNum, "signUp")
 }
 
+export function createManager(username, fname, lname, password, addr, phoneNum){
+    return auth(username, fname, lname, password, addr, phoneNum, "addManager")
+}

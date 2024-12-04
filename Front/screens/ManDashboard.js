@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Button } from "react-native";
 
 //Manage Stock Level
 //Add managers
@@ -6,11 +6,15 @@ import { View, Text } from "react-native";
     //book sales
     //customer statistics
 
-function manDashboard(){
+function ManDashboard(props){
 
-    return (<View>
+    return (
+    <View>
+        <Button title="Add manager" onPress={() => props.navigation.navigate("ManRegister")}/>
+        <Button title="Manage Stock" onPress={()=> props.navigation.navigate("StockManagement")}/>
+        <Button title="Statistics" onPress={()=> props.navigation.navigate("Statistics")}/>
         <Text>MANAGER DASHBOARD</Text>
     </View>)
 
 }
-export default manDashboard;
+export default ManDashboard;

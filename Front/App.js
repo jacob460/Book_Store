@@ -6,17 +6,19 @@
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StyleSheet } from 'react-native';
 import Home from './screens/Home';
 import Welcome from './screens/Welcome';
 import Register from './screens/Register';
 import WelcomeManager from './screens/WelcomeManager';
-import manDashboard from './screens/ManDashboard';
+import ManDashboard from './screens/ManDashboard';
 import BookList from './screens/BookList';
 import BookData from './screens/BookData';
 import { useContext } from 'react';
 import AuthContextProvider from './components/AuthContext';
 import { AuthContext } from './components/AuthContext';
+import ManRegister from './screens/ManRegister';
+import Statistics from './screens/Statistics';
+import StockManagement from './screens/StockManagement';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,9 +26,12 @@ function ManAuthStack(){
   return(
     <Stack.Navigator initialRouteName="WelcomeManager">
       <Stack.Screen name="WelcomeManager" component={WelcomeManager}/>
-      <Stack.Screen name="Dashboard" component={manDashboard}/>
+      <Stack.Screen name="Dashboard" component={ManDashboard}/>
       <Stack.Screen name="BookStore List" component={BookList}/>
       <Stack.Screen name="BookData" component={BookData}/>
+      <Stack.Screen name="ManRegister" component={ManRegister}/>
+      <Stack.Screen name="StockManagement" component={StockManagement}/>
+      <Stack.Screen name="Statistics" component={Statistics}/>
     </Stack.Navigator>);
 }
 

@@ -1,5 +1,5 @@
 import express from 'express'
-import { createUser, queryBookstore, tryConnection } from './Backend.js';
+import { createUser, queryBookstore, tryConnection, createManager } from './Backend.js';
 import cors from 'cors'
 
 const app = express();
@@ -39,6 +39,11 @@ app.get('/bookList', async (req, res)=>{
     const offset = req.query.page*limit
     const result = await queryBookstore(`SELECT * FROM bookdata LIMIT ${limit} offset ${offset}`);
     res.send(result)
+})
+
+app.get('/addManager', async(req, res)=>{
+    const result = await createManager(req.query.username, req.query.fname, req.query.lname, req.query.password, req.query.addr, req.query.phoneNum);
+    return result
 })
 
 app.get('/bookDetails', async(req, res)=>{

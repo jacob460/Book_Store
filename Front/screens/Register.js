@@ -45,39 +45,12 @@ function Register(props){
                 const data = await createUser(username, fname, lname, password, address, phoneNum);
                 console.log("validated");
                 ctx.auth(username, password, "TEST");
-                //setInfo( data.data[0].isbn10 )
-                //setStat(data.status)
-                //setStatMsg(data.statusText)
                 setAuthIssue("AUTH");
                 console.log(data.data)
             }catch(error){
                 setAuthIssue("AUTHISSUE");
                 console.log("UNABLE TO AUTHENTICATE TRY AGAIN: "+error)
             }
-
-           /* try{
-                const data = await createUser(email, password);
-
-                const db = getFirestore(app);
-                const userCollection = collection(db, "Users");
-                const profile = {
-                    fname: fname,
-                    lname: lname,
-                    age: age,
-                };
-                const myDoc = doc(userCollection, data.localId);
-                await setDoc(myDoc, profile);
-                console.log(data.idToken);
-                ctx.auth(data.idToken, email, data.localId);
-
-            }catch(error){
-                console.log("ERROR CREATE: " + error.response.data.error.message);
-                if(error.response.data.error.message == "EMAIL_EXISTS"){
-                    console.log("EMAIL_EXISTS: Try another email or login with existing credentials.");
-                }else{
-                    console.log(error.response.data.error.message);
-                }
-            }*/
         }
     }
 
