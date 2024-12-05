@@ -1,7 +1,8 @@
 import { Text, View, StyleSheet, Button } from "react-native";
 import { AuthContext } from "../components/AuthContext";
-import { useContext, useState } from "react";
+import { useContext, useDebugValue, useEffect, useState } from "react";
 import FormField from "../components/FormField";
+import axios from "axios";
 
 function Welcome(props){
 
@@ -11,6 +12,7 @@ function Welcome(props){
     const [lname, setLname] = useState("");
     const [age, setAge] = useState(0);
     const ctx = useContext(AuthContext);
+    const [cart, setCart] = useState([]);
 
     function handleLogout(){
            ctx.logout();
@@ -22,8 +24,14 @@ function Welcome(props){
         setAge(user.age);
         setEditInfo(!editInfo)
     }
-    
 
+    async function cartOpen(){
+        console.log("cartOpen")
+        const requestData = await axios.get("http://localhost:8080/getCart", {params: {size: 2, limit: 2, page: 2}})
+        console.log(requestData)
+        //props.navigation.navigate("Cart")
+    }
+    
     return(
     <View style={styles.container}>
         
@@ -31,6 +39,7 @@ function Welcome(props){
         <Text style={styles.title}>CustomerID: {ctx.customerID}</Text>
         <Button title="Logout" onPress={handleLogout}/>
         <Button title="Store" onPress={() => props.navigation.navigate("BookStore List")}/>
+        <Button title="Cart" onPress={() => props.navigation.navigate("Cart")}/>
         {editInfo == true 
         ?   (<View style={{marginVertical:15,}}>
             <FormField label="First Name" secure={false} capitalize={"words"} textChange={setFname} info={ctx.email}></FormField>

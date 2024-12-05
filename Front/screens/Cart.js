@@ -1,17 +1,16 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { View, Text, Button, Dimensions, FlatList, TextInput, Pressable} from "react-native";
 //import { FlatList } from "react-native-web";
-import BookCard from "../components/BookCard";
-import { useContext } from "react";
+import CartCard from "../components/CartCard";
 import { AuthContext } from "../components/AuthContext";
 
 const windowDimensions = Dimensions.get('window');
 const screenDimensions = Dimensions.get('screen');
 
-function StockManagement(props){
+function BookList(props){
 
-    const ctx = useContext(AuthContext);
+    const ctx = useContext(AuthContext)
 
     const [dimensions, setDimensions] = useState({
         window: windowDimensions,
@@ -36,7 +35,7 @@ function StockManagement(props){
 
     useEffect(() => {
         async function grabData(){
-            const requestdata = await axios.get("http://localhost:8080/bookList", {params: {page: index, size: amount}})
+            const requestdata = await axios.get("http://localhost:8080/getCart", {params: {customerID: ctx.customerID}})
             setData(requestdata.data[0])      
             console.log(requestdata.data[0])
             setIsLoaded(true)
@@ -46,10 +45,11 @@ function StockManagement(props){
 
     function renderCard(data){
         var current = data.item
+        var color = "grey"
         //select * from bookdata inner join book_author where bookdata.isbn13=book_author.isbn13 AND bookdata.isbn13="0073999140774";
-        
+        if(current.Stock==0){ color = "red"}
         return(
-        <BookCard currentItem={current} manager={ctx.manager} onPress={() => props.navigation.navigate("BookData", {current})}/>
+        <CartCard color={color} currentItem={current} onPress={() => props.navigation.navigate("BookData", {current})}/>
         )
     }
 
@@ -77,11 +77,10 @@ function StockManagement(props){
 
     return(<View >
         <Text>BOOKSTORE LIST : {amount}</Text>
-        <Text>{dimensions.window.height}</Text>
         <TextInput onChangeText={assignSize}></TextInput>
         <Button title="Per Page" onPress={changePerPage}/>
         {isLoaded ? 
-        <View style={{maxHeight: dimensions.window.height-200}}>
+        <View style={{maxHeight: dimensions.window.height - 200}}>
             <FlatList
             persistentScrollbar={true}
             data={data}
@@ -96,9 +95,13 @@ function StockManagement(props){
                 <Text style={{marginHorizontal: 15,}}>Next Page</Text>
                 </Pressable>
             </View>
+            {ctx.manager ?
+                <Button title="Homepage" onPress={() => props.navigation.navigate("WelcomeManager")}/>
+            :   <Button title="Homepage" onPress={() => props.navigation.navigate("Welcome")}/>
+            }
         </View> : null}
 
     </View>
    )
 }
-export default StockManagement;
+export default BookList;

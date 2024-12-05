@@ -102,6 +102,54 @@ function parseResult(data){
     return(result)
 }
 
+app.get('/editStock', async(req, res)=>{
+    const result = await queryBookstore(`UPDATE bookdata SET Stock=${req.query.newValue} WHERE isbn13=\"${req.query.isbn13}\"`);
+    return result
+})
+
+app.get('/addCart', async(req, res)=>{
+    const amount = await queryBookstore(`SELECT amount FROM Cart WHERE isbn13=\"${req.query.isbn13}\" AND customerID=${req.query.customerID}`)
+    //console.log(amount[0])
+    await queryBookstore(`INSERT INTO Cart VALUES (${req.query.customerID}, \"${req.query.isbn13}\")`)
+    await queryBookstore(`UPDATE bookdata SET Stock=${req.query.stockValue} WHERE isbn13=\"${req.query.isbn13}\"`)
+    //return result
+})
+
+app.get('/getCart', async(req,res)=>{
+    var query
+    var tempresult = await queryBookstore(`SELECT isbn13,amount FROM Cart WHERE customerID=${req.query.customerID}`)
+    console.log(tempresult)
+    if(tempresult[0].length != 0){
+        query = `isbn13=\"${tempresult[0][0].isbn13}\"`
+        if(tempresult[0].length > 1){
+            for(var i = 1; i < tempresult[0].length; i++){
+                query = query + " OR " + `isbn13=\"${tempresult[0][i].isbn13}\"`
+            }
+        }
+    }
+    console.log("QUERY: " + query)
+    const result = await queryBookstore(`SELECT * FROM bookdata WHERE ${query}`)
+    console.log(result[0])
+    res.send(result)
+})
+
+/*app.get('/getCart', async (req, res)=>{
+    var query=""
+    const tempresult = await queryBookstore(`SELECT amount FROM Cart WHERE customerID=3`)
+    if(tempresult[0].length != 0){
+        query = `isbn13=\"${tempresult[0][0].isbn13}\"`
+        if(tempresult[0].length > 1){
+            for(var i = 1; i < tempresult[0].length; i++){
+                query = query + " OR " + `isbn13=\"${tempresult[0][i].isbn13}\"`
+            }
+        }
+    }
+    console.log(query)
+    const result = await queryBookstore(`SELECT * FROM Cart LIMIT 5`);
+    res.send(result)
+})*/
+
+
 app.use((err, req, next) => {
     //console.error(err.stack);
     //resizeBy.status(500).send('something broke!')

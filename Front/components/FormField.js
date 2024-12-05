@@ -9,7 +9,9 @@ function FormField(props){
         onChangeText={props.textChange}
         secureTextEntry={props.secure}
         keyboardType={props.keyboard}
-        autoCapitalize={props.capitalize}>{props.info}</TextInput>
+        autoCapitalize={props.capitalize}
+        value={props.info}
+        ></TextInput>
     </View>
     );
 }

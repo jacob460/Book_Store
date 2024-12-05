@@ -19,6 +19,7 @@ import { AuthContext } from './components/AuthContext';
 import ManRegister from './screens/ManRegister';
 import Statistics from './screens/Statistics';
 import StockManagement from './screens/StockManagement';
+import Cart from './screens/Cart';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,7 +28,7 @@ function ManAuthStack(){
     <Stack.Navigator initialRouteName="WelcomeManager">
       <Stack.Screen name="WelcomeManager" component={WelcomeManager}/>
       <Stack.Screen name="Dashboard" component={ManDashboard}/>
-      <Stack.Screen name="BookStore List" component={BookList}/>
+      <Stack.Screen name="BookStore List" component={BookList} options={{headerShown: false}}/>
       <Stack.Screen name="BookData" component={BookData}/>
       <Stack.Screen name="ManRegister" component={ManRegister}/>
       <Stack.Screen name="StockManagement" component={StockManagement}/>
@@ -39,8 +40,9 @@ function AuthStack(){
   return(
   <Stack.Navigator initialRouteName="Welcome">
     <Stack.Screen name="Welcome" component={Welcome}/>
-    <Stack.Screen name="BookStore List" component={BookList}/>
+    <Stack.Screen name="BookStore List" component={BookList} options={{headerShown: false}}/>
     <Stack.Screen name="BookData" component={BookData}/>
+    <Stack.Screen name="Cart" component={Cart}/>
   </Stack.Navigator>);
 }
 function PreAuthStack(){

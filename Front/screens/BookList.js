@@ -1,13 +1,16 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { View, Text, Button, Dimensions, FlatList, TextInput, Pressable} from "react-native";
 //import { FlatList } from "react-native-web";
 import BookCard from "../components/BookCard";
+import { AuthContext } from "../components/AuthContext";
 
 const windowDimensions = Dimensions.get('window');
 const screenDimensions = Dimensions.get('screen');
 
 function BookList(props){
+
+    const ctx = useContext(AuthContext)
 
     const [dimensions, setDimensions] = useState({
         window: windowDimensions,
@@ -42,10 +45,11 @@ function BookList(props){
 
     function renderCard(data){
         var current = data.item
+        var color = "grey"
         //select * from bookdata inner join book_author where bookdata.isbn13=book_author.isbn13 AND bookdata.isbn13="0073999140774";
-        
+        if(current.Stock==0){ color = "red"}
         return(
-        <BookCard currentItem={current} onPress={() => props.navigation.navigate("BookData", {current})}/>
+        <BookCard color={color} currentItem={current} onPress={() => props.navigation.navigate("BookData", {current})}/>
         )
     }
 
@@ -76,7 +80,7 @@ function BookList(props){
         <TextInput onChangeText={assignSize}></TextInput>
         <Button title="Per Page" onPress={changePerPage}/>
         {isLoaded ? 
-        <View style={{maxHeight: dimensions.window.height - 100}}>
+        <View style={{maxHeight: dimensions.window.height - 200}}>
             <FlatList
             persistentScrollbar={true}
             data={data}
@@ -91,6 +95,10 @@ function BookList(props){
                 <Text style={{marginHorizontal: 15,}}>Next Page</Text>
                 </Pressable>
             </View>
+            {ctx.manager ?
+                <Button title="Homepage" onPress={() => props.navigation.navigate("WelcomeManager")}/>
+            :   <Button title="Homepage" onPress={() => props.navigation.navigate("Welcome")}/>
+            }
         </View> : null}
 
     </View>
