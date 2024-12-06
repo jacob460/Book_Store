@@ -146,9 +146,14 @@ app.get('/removeFromCart', async(req,res)=>{
 })
 
 app.get('/purchase', async(req,res)=>{
-    const result = await queryBookstore(`SELECT * FROM Cart WHERE customerID=\"${req.query.customerID}\"`)
-    console.log(result)
-    res.send(result)
+    var total=0, query=""
+    const result = await queryBookstore(`SELECT Cart.customerID, Cart.isbn13, Cart.amount, bookdata.Price FROM Cart JOIN bookdata WHERE (Cart.isbn13=bookdata.isbn13) AND Cart.customerID=\"${req.query.customerID}\"`)
+    console.log(result[0])
+    for(var i = 0; i < result[0].length; i++){
+        total = total + (result[0][i].amount * result[0][i].Price)
+    }
+    console.log("Total: " + total)
+    res.send(total)
 })
 
 app.use((err, req, next) => {
