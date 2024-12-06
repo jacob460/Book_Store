@@ -18,6 +18,7 @@ function BookList(props){
       });
       const [index, setIndex] = useState(0)
       const [amount, setAmount] = useState(15)
+      const [update, setUpdate] = useState(false)
     
       useEffect(() => {
         const subscription = Dimensions.addEventListener(

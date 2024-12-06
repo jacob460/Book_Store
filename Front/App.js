@@ -20,6 +20,7 @@ import ManRegister from './screens/ManRegister';
 import Statistics from './screens/Statistics';
 import StockManagement from './screens/StockManagement';
 import Cart from './screens/Cart';
+import PurchaseHistory from './screens/PurchaseHistory';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,7 @@ function AuthStack(){
     <Stack.Screen name="BookStore List" component={BookList} options={{headerShown: false}}/>
     <Stack.Screen name="BookData" component={BookData}/>
     <Stack.Screen name="Cart" component={Cart}/>
+    <Stack.Screen name="PurchaseHistory" component={PurchaseHistory}/>
   </Stack.Navigator>);
 }
 function PreAuthStack(){

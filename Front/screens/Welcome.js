@@ -40,6 +40,7 @@ function Welcome(props){
         <Button title="Logout" onPress={handleLogout}/>
         <Button title="Store" onPress={() => props.navigation.navigate("BookStore List")}/>
         <Button title="Cart" onPress={() => props.navigation.navigate("Cart")}/>
+        <Button title="Purchase History" onPress={() => props.navigation.navigate("PurchaseHistory")}/>
         {editInfo == true 
         ?   (<View style={{marginVertical:15,}}>
             <FormField label="First Name" secure={false} capitalize={"words"} textChange={setFname} info={ctx.email}></FormField>

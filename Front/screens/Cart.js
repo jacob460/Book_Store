@@ -74,6 +74,8 @@ function BookList(props){
 
     async function purchase(){
         const requestdata = await axios.get("http://localhost:8080/purchase", {params: {customerID: ctx.customerID}})
+        console.log(requestdata)
+        props.navigation.navigate("Welcome")
     }
 
     return(<View >

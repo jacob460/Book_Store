@@ -146,14 +146,22 @@ app.get('/removeFromCart', async(req,res)=>{
 })
 
 app.get('/purchase', async(req,res)=>{
-    var total=0, query=""
+    var total=0
     const result = await queryBookstore(`SELECT Cart.customerID, Cart.isbn13, Cart.amount, bookdata.Price FROM Cart JOIN bookdata WHERE (Cart.isbn13=bookdata.isbn13) AND Cart.customerID=\"${req.query.customerID}\"`)
     console.log(result[0])
     for(var i = 0; i < result[0].length; i++){
         total = total + (result[0][i].amount * result[0][i].Price)
     }
     console.log("Total: " + total)
-    res.send(total)
+    const result2 = await queryBookstore(`INSERT INTO orders (customerID, total, dateOrdered) VALUES (${req.query.customerID}, ${total}, CURDATE())`)
+    //orderID, isbn13, amount
+    const orderID = await queryBookstore(`SELECT orderID FROM orders ORDER BY orderID DESC LIMIT 1`)
+    for(var i = 0; i < result[0].length; i++){
+        await queryBookstore(`INSERT INTO ordercontents VALUES (${orderID[0][0].orderID}, \"${result[0][i].isbn13}\", ${result[0][i].amount})`)
+    }
+    console.log(orderID)
+    const result3 = await queryBookstore(`DELETE FROM Cart WHERE customerID=${req.query.customerID}`)
+    res.send("Done")
 })
 
 app.use((err, req, next) => {
