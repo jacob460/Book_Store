@@ -124,37 +124,32 @@ app.get('/addCart', async(req, res)=>{
 })
 
 app.get('/getCart', async(req,res)=>{
-    var result = await queryBookstore(`SELECT isbn13,amount FROM Cart WHERE customerID=${req.query.customerID}`)
-    if(result[0].length > 0){}
-    var query = " isbn13=\"" + result[0][0].isbn13 + "\""
-    console.log(result[0])
-    console.log(result[0].length)
-    for(var i = 1; i < result[0].length; i++){
-        query = query + " OR isbn13=\"" + result[0][i].isbn13 + "\""
-    }
-    console.log(query)
-    var bookdata = await queryBookstore(`SELECT * FROM bookdata WHERE ${query}`)
-    console.log(bookdata)
-    
+    var result = await queryBookstore(`SELECT * FROM bookdata join Cart WHERE (bookdata.isbn13=Cart.isbn13 AND Cart.customerID=${req.query.customerID});`)
     res.send(result)
 })
 
-/*app.get('/getCart', async (req, res)=>{
-    var query=""
-    const tempresult = await queryBookstore(`SELECT amount FROM Cart WHERE customerID=3`)
-    if(tempresult[0].length != 0){
-        query = `isbn13=\"${tempresult[0][0].isbn13}\"`
-        if(tempresult[0].length > 1){
-            for(var i = 1; i < tempresult[0].length; i++){
-                query = query + " OR " + `isbn13=\"${tempresult[0][i].isbn13}\"`
-            }
-        }
+app.get('/removeFromCart', async(req,res)=>{
+    var result = await queryBookstore(`SELECT amount FROM Cart WHERE isbn13=\"${req.query.isbn13}\" AND customerID=${req.query.customerID}`)
+    var amount = result[0][0].amount
+    console.log("Amount: " + (amount-1))
+    console.log((amount-1) == 0)
+    if((amount-1) == 0){
+        await queryBookstore(`DELETE FROM Cart WHERE customerID=${req.query.customerID} AND isbn13=\"${req.query.isbn13}\"`)
+    }else{
+        await queryBookstore(`UPDATE Cart SET amount=${amount-1} WHERE customerID=${req.query.customerID} AND isbn13=\"${req.query.isbn13}\"`)
     }
-    console.log(query)
-    const result = await queryBookstore(`SELECT * FROM Cart LIMIT 5`);
+    result = await queryBookstore(`SELECT Stock FROM bookdata WHERE isbn13=\"${req.query.isbn13}\"`)
+    var stock = result[0][0].Stock
+    console.log("Stock: " + stock)
+    await queryBookstore(`UPDATE bookdata SET Stock=${stock+1} WHERE isbn13=\"${req.query.isbn13}\"`)
     res.send(result)
-})*/
+})
 
+app.get('/purchase', async(req,res)=>{
+    const result = await queryBookstore(`SELECT * FROM Cart WHERE customerID=\"${req.query.customerID}\"`)
+    console.log(result)
+    res.send(result)
+})
 
 app.use((err, req, next) => {
     //console.error(err.stack);

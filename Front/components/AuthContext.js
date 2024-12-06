@@ -9,7 +9,7 @@ export const AuthContext = createContext({
     auth: (token)=>{},
     logout: () => {},
     cartControl: (token)=>{},
-    cart: [""],
+    cart: false,
     returnCart: ()=>{},
 });
 
@@ -18,29 +18,23 @@ function AuthContextProvider({children}){
     const [username, setUsername] = useState();
     const [manager, setManager] = useState();
     const [customerID, setCustomerID] = useState();
-    const [cart, setCart] = useState([]);
+    const [cart, setCart] = useState(false);
 
     function auth(username, manager, customerID){
         console.log("AUTHCONTEXT: " + username + manager)
         setUsername(username);
         setManager(manager);
         setCustomerID(customerID)
-        setCart([])
+        setCart(false)
     }
     function logout(){
         setUsername(null);
         setManager(null);
         setCustomerID(null);
-        setCart([])
+        setCart(false)
     }
-    function cartControl(isbn13, action){
-        var tempCart = []
-        console.log(isbn13 + ": ISBN--ACTION: " + action)
-        if(action == "add"){
-          // axios.get("http://localhost:8080/addCart", params{})
-        }else if(action == "remove"){
-            console.log("REMOVE NOT IMPLEMENTED YET")
-        }
+    function cartControl(){
+        setCart(!cart)
     }
     function returnCart(){
         return(cart)

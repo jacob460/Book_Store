@@ -41,15 +41,12 @@ function BookList(props){
             setIsLoaded(true)
         }
         grabData()
-    },[])
+    },[ctx.cart])
 
     function renderCard(data){
         var current = data.item
-        var color = "grey"
-        //select * from bookdata inner join book_author where bookdata.isbn13=book_author.isbn13 AND bookdata.isbn13="0073999140774";
-        if(current.Stock==0){ color = "red"}
         return(
-        <CartCard color={color} currentItem={current} onPress={() => props.navigation.navigate("BookData", {current})}/>
+        <CartCard currentItem={current} onPress={() => props.navigation.navigate("BookData", {current})}/>
         )
     }
 
@@ -75,6 +72,10 @@ function BookList(props){
         setAmount(txt)
     }
 
+    async function purchase(){
+        const requestdata = await axios.get("http://localhost:8080/purchase", {params: {customerID: ctx.customerID}})
+    }
+
     return(<View >
         <Text>BOOKSTORE LIST : {amount}</Text>
         <TextInput onChangeText={assignSize}></TextInput>
@@ -95,10 +96,7 @@ function BookList(props){
                 <Text style={{marginHorizontal: 15,}}>Next Page</Text>
                 </Pressable>
             </View>
-            {ctx.manager ?
-                <Button title="Homepage" onPress={() => props.navigation.navigate("WelcomeManager")}/>
-            :   <Button title="Homepage" onPress={() => props.navigation.navigate("Welcome")}/>
-            }
+            <Button title="Purchase" onPress={purchase}/>
         </View> : null}
 
     </View>

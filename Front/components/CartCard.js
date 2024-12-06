@@ -13,9 +13,20 @@ function CartCard(props){
   const [stockValue, setStockValue] = useState(props.currentItem.Stock)
   const [inStock, setInStock] = useState()
   const [cart,  setCart] = useState(true)
+  const [amount, setAmount] = useState(props.currentItem.amount)
+
+useEffect(()=>{
+
+}, [amount])
+
+async function removeFromCart(){
+  await axios.get("http://localhost:8080/removeFromCart", {params: {isbn13: props.currentItem.isbn13, customerID: ctx.customerID}})
+  setAmount(amount-1)
+  ctx.cartControl()
+}
 
 return(    
-<View style={[styles.container, {backgroundColor: props.color,}]}>
+<View style={[styles.container, {backgroundColor: 'grey',}]}>
     <Pressable onPress={props.onPress}>
         <Text>{props.currentItem.title}</Text>
     </Pressable>
@@ -23,8 +34,12 @@ return(
     <Text>Publication Date: {props.currentItem.publicationDate}</Text>
     <Text>isbn13:{props.currentItem.isbn13}</Text>
     <Text>isbn10:{props.currentItem.isbn10}</Text>
-    <Text>${props.currentItem.Price}</Text>    
-</View>
+    <Text>${props.currentItem.Price}</Text>
+    <Text>In Cart: {amount}</Text>
+    {amount > 0 ?
+    <Button title="Remove" onPress={removeFromCart}/> : null
+    }
+  </View>
 
 )
 }

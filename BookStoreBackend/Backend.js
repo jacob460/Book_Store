@@ -9,7 +9,12 @@ import mysql from 'mysql2';
  * root
  * Mechromancer1427
  */
-var pool
+var pool = mysql.createPool({
+    host: "127.0.0.1",
+    user: "root",
+    password: "Mechromancer1427",
+    database: "bookstore", 
+}).promise();
     /*var pool = mysql.createPool({
         host: "localhost",
         user: "s",
@@ -20,12 +25,12 @@ var pool
     */
 export async function tryConnection(username, password){
     var test
-    pool = mysql.createPool({
+    /*pool = mysql.createPool({
         host: "localhost",
         user: "supermanager",
         password: "password",
         database: "bookstore", 
-    }).promise();
+    }).promise();*/
     
     //const test = pool.query(`SELECT * FROM customers WHERE username=\"${username}\" AND password=\"${password}\"` );
         test = await pool.query(`SELECT * FROM customers WHERE username=\"${username}\" AND password=\"${password}\"` );
@@ -42,12 +47,12 @@ export async function tryConnection(username, password){
     return(test)
 }
 export async function createUser(username, fname, lname, password, addr, phoneNum){
-    pool = mysql.createPool({
+    /*pool = mysql.createPool({
         host: "127.0.0.1",
         user: "root",
         password: "Mechromancer1427",
         database: "bookstore", 
-    }).promise();
+    }).promise();*/
     console.log("CREATE USER:")
     console.log(username);
     console.log(password);
@@ -62,12 +67,12 @@ export async function createUser(username, fname, lname, password, addr, phoneNu
 }
 
 export async function createManager(username, fname, lname, password, addr, phoneNum){
-    pool = mysql.createPool({
+    /*pool = mysql.createPool({
         host: "127.0.0.1",
         user: "root",
         password: "Mechromancer1427",
         database: "bookstore", 
-    }).promise();
+    }).promise();*/
     console.log("CREATE MANAGER:")
     console.log(username);
     console.log(password);
@@ -81,12 +86,12 @@ export async function createManager(username, fname, lname, password, addr, phon
 
 export async function queryBookstore(query){
 
-    pool = mysql.createPool({
+    /*pool = mysql.createPool({
         host: "127.0.0.1",
         user: "root",
         password: "Mechromancer1427",
         database: "bookstore", 
-    }).promise();
+    }).promise();*/
     console.log(query)
     const result = await pool.query(query);
     //console.log(result[0]);

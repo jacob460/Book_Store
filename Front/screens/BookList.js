@@ -41,7 +41,7 @@ function BookList(props){
             setIsLoaded(true)
         }
         grabData()
-    },[])
+    },[ctx.cart])
 
     function renderCard(data){
         var current = data.item
