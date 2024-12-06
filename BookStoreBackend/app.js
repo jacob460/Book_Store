@@ -108,28 +108,34 @@ app.get('/editStock', async(req, res)=>{
 })
 
 app.get('/addCart', async(req, res)=>{
-    const amount = await queryBookstore(`SELECT amount FROM Cart WHERE isbn13=\"${req.query.isbn13}\" AND customerID=${req.query.customerID}`)
-    //console.log(amount[0])
-    await queryBookstore(`INSERT INTO Cart VALUES (${req.query.customerID}, \"${req.query.isbn13}\")`)
-    await queryBookstore(`UPDATE bookdata SET Stock=${req.query.stockValue} WHERE isbn13=\"${req.query.isbn13}\"`)
-    //return result
+    const result = await queryBookstore(`SELECT amount FROM Cart WHERE isbn13=\"${req.query.isbn13}\" AND customerID=${req.query.customerID}`)
+    console.log(result[0].length)
+    if(result[0].length == 0){
+        await queryBookstore(`INSERT INTO Cart (customerID, isbn13, amount) VALUES (${req.query.customerID}, \"${req.query.isbn13}\", 1)`)
+        await queryBookstore(`UPDATE bookdata SET Stock=${req.query.stockValue} WHERE isbn13=\"${req.query.isbn13}\"`)
+    }
+    else{
+        var amount = result[0][0].amount + 1
+        console.log(amount)
+        await queryBookstore(`UPDATE Cart SET amount=${amount} WHERE customerID=${req.query.customerID} AND isbn13=\"${req.query.isbn13}\"`)
+        await queryBookstore(`UPDATE bookdata SET Stock=${req.query.stockValue} WHERE isbn13=\"${req.query.isbn13}\"`)
+    }
+    res.send("done")
 })
 
 app.get('/getCart', async(req,res)=>{
-    var query
-    var tempresult = await queryBookstore(`SELECT isbn13,amount FROM Cart WHERE customerID=${req.query.customerID}`)
-    console.log(tempresult)
-    if(tempresult[0].length != 0){
-        query = `isbn13=\"${tempresult[0][0].isbn13}\"`
-        if(tempresult[0].length > 1){
-            for(var i = 1; i < tempresult[0].length; i++){
-                query = query + " OR " + `isbn13=\"${tempresult[0][i].isbn13}\"`
-            }
-        }
-    }
-    console.log("QUERY: " + query)
-    const result = await queryBookstore(`SELECT * FROM bookdata WHERE ${query}`)
+    var result = await queryBookstore(`SELECT isbn13,amount FROM Cart WHERE customerID=${req.query.customerID}`)
+    if(result[0].length > 0){}
+    var query = " isbn13=\"" + result[0][0].isbn13 + "\""
     console.log(result[0])
+    console.log(result[0].length)
+    for(var i = 1; i < result[0].length; i++){
+        query = query + " OR isbn13=\"" + result[0][i].isbn13 + "\""
+    }
+    console.log(query)
+    var bookdata = await queryBookstore(`SELECT * FROM bookdata WHERE ${query}`)
+    console.log(bookdata)
+    
     res.send(result)
 })
 

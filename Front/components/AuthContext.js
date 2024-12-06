@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import axios from "axios";
 
 export const AuthContext = createContext({
     username: "",
@@ -36,9 +37,7 @@ function AuthContextProvider({children}){
         var tempCart = []
         console.log(isbn13 + ": ISBN--ACTION: " + action)
         if(action == "add"){
-            tempCart = cart
-            tempCart.push(isbn13)
-            setCart(tempCart)
+          // axios.get("http://localhost:8080/addCart", params{})
         }else if(action == "remove"){
             console.log("REMOVE NOT IMPLEMENTED YET")
         }

@@ -18,19 +18,24 @@ function BookCard(props){
     const requestdata = await axios.get("http://localhost:8080/editStock", {params: {newValue:stockValue, isbn13:props.currentItem.isbn13}})
   }
 
-  useEffect(()=>{
-    if(props.currentItem.Stock == 0){
+  function checkStock(){
+    console.log("Checking stock")
+    if(stockValue == 0){
       setInStock("Out of Stock")
     }else{
       setInStock("In Stock")
     }
-  })
+  }
+
+  useEffect(()=>{
+    checkStock()
+  }, [stockValue])
 
   async function addCart(){
     console.log("ADD: " + props.currentItem.isbn13)
-    ctx.cartControl(props.currentItem.isbn13, "add")
-    const requestdata = await axios.get("http://localhost:8080/addCart", {params: {isbn13: props.currentItem.isbn13, stockValue: props.currentItem.Stock-1, customerID: ctx.customerID}})
-    props.currentItem.Stock = props.currentItem.Stock-1
+    //ctx.cartControl(props.currentItem.isbn13, "add")
+    await axios.get("http://localhost:8080/addCart", {params: {isbn13: props.currentItem.isbn13, stockValue: stockValue-1, customerID: ctx.customerID}})
+    setStockValue(stockValue-1)
   }
 
 return(    
@@ -43,6 +48,7 @@ return(
     <Text>isbn13:{props.currentItem.isbn13}</Text>
     <Text>isbn10:{props.currentItem.isbn10}</Text>
     <Text>${props.currentItem.Price}</Text>
+    <Text>{stockValue}</Text>
     <Text>{props.manager}</Text>
     {props.manager?
       <View>
