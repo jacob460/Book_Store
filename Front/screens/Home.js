@@ -4,6 +4,7 @@ import FormField from "../components/FormField";
 import FlatButton from "../components/FlatButton";
 import { validateUser } from "../components/Authenticate";
 import { AuthContext } from "../components/AuthContext";
+import axios from "axios";
 
 function Home(props){
 
@@ -44,6 +45,7 @@ function Home(props){
             <FormField label="Email" secure={false} textChange={setEmail}/>
             <FormField label="Password" secure={true} textChange={setPassword}/>
             <FlatButton onPress={handleSubmit}>Submit</FlatButton>
+            <FlatButton onPress={async()=> {const test = await axios.get("http://localhost:8080/test"); console.log(test.data[0][0].customerID)}}>TEST</FlatButton>
             <Pressable onPress={handleCreate}>
                 <Text>Create an account</Text>
             </Pressable>

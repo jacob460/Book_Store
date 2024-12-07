@@ -27,10 +27,9 @@ app.get('/signUp', async (req, res)=>{
     console.log(req.query.phoneNum)
     //const result = await queryBookstore("SELECT * FROM bookdata LIMIT 10");
     //console.log(result[0])
-    const result = await createUser(req.query.username, req.query.fname, req.query.lname, req.query.password, req.query.addr, req.query.phoneNum);
-    //console.log(result)
-    
-    res.send(result)
+    await createUser(req.query.username, req.query.fname, req.query.lname, req.query.password, req.query.addr, req.query.phoneNum);
+    const customerID = await queryBookstore(`SELECT customerID FROM customers WHERE username=\"${req.query.username}\"`)    
+    res.send(customerID)
 })
 
 app.get('/bookList', async (req, res)=>{
@@ -162,6 +161,52 @@ app.get('/purchase', async(req,res)=>{
     console.log(orderID)
     const result3 = await queryBookstore(`DELETE FROM Cart WHERE customerID=${req.query.customerID}`)
     res.send("Done")
+})
+
+app.get('/purchaseHistory', async (req, res) => {
+    var response = [{
+        'title': 0,
+        'data': ["test"] }]
+    var test = new Object()
+      var buildResponse = []
+      buildResponse.push(response[0])  
+      //console.log("response:")
+      //console.log(buildResponse[1])
+        
+      //
+    const orderIDs = await queryBookstore(`SELECT * FROM  ordercontents JOIN orders ON ordercontents.orderID=orders.orderID JOIN bookdata ON ordercontents.isbn13=bookdata.isbn13 WHERE customerID=\"${req.query.customerID}\"`)
+    console.log(orderIDs[0])
+    //console.log("\n\n")
+    for(var i = 0; i < orderIDs[0].length; i++){
+        console.log(orderIDs[0][i].orderID)
+        if(test.orderID != orderIDs[0][i].orderID){
+            buildResponse.push(JSON.parse(JSON.stringify(test)))
+            test.data = []
+            test.orderID = orderIDs[0][i].orderID;
+            test.dateOrdered = orderIDs[0][i].dateOrdered
+            test.price = orderIDs[0][i].total
+            test.data.push(orderIDs[0][i])
+        }else{
+            test.data.push(orderIDs[0][i])
+        }
+    }
+    buildResponse.push(JSON.parse(JSON.stringify(test)))
+    buildResponse.shift()
+    buildResponse.shift()
+    //for(var i = 0; i < buildResponse.length; i++){
+    //    console.log(buildResponse[i])
+    //}
+    //console.log(buildResponse)
+    //buildResponse.shift()
+    //const result = await queryBookstore(`SELECT * FROM  ordercontents JOIN orders ON ordercontents.orderID=orders.orderID JOIN bookdata ON bookdata.isbn13=ordercontents.isbn13 WHERE orders.customerID=${req.query.customerID}`)
+    console.log(buildResponse)
+    
+    res.send(buildResponse)
+})
+
+app.get('/test', async(req,res)=>{
+    const customerID = await queryBookstore(`SELECT customerID FROM customers WHERE username=\"username\"`)
+    res.send(customerID)
 })
 
 app.use((err, req, next) => {
