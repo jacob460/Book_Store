@@ -1,7 +1,7 @@
 create database bookstore COLLATE utf8_bin; 
 use bookstore;
 
-CREATE TABLE BookData  (isbn10 char(10) NOT NULL, isbn13 CHAR(13) NOT NULL, title varchar(255) NOT NULL, publicationDate DATE NOT NULL, numOfPages INT NOT NULL, Stock INT NOT NULL, Price DOUBLE(65,2) NOT NULL, PRIMARY KEY(isbn13));  
+CREATE TABLE BookData  (isbn10 char(10) NOT NULL, isbn13 CHAR(13) NOT NULL, title varchar(255) NOT NULL, publicationDate DATE NOT NULL, numOfPages INT NOT NULL, Stock INT NOT NULL, Price DOUBLE(65,2) NOT NULL , avg_rating double(3,2) not null, rating_count int not null, PRIMARY KEY(isbn13));  
 
 CREATE TABLE Authors (author varchar(255), primary key (author)); 
 CREATE TABLE Book_Author (isbn13 CHAR(13), author varchar(255), primary key (isbn13, author), foreign KEY(isbn13) REFERENCES BookData(isbn13), foreign key (author) references Authors(author));  
