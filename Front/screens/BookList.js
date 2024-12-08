@@ -132,11 +132,13 @@ function BookList(props){
         setSort(`publicationDate ${direction}`)
     }
     function sortRating(direction){
-        setSort(`rating ${direction}`)
+        setSort(`avg_rating ${direction}`)
     }
     function clearSort(){
         setSort("")
     }
+
+    
 
     return(<View >
         <Text>BOOKSTORE LIST : {amount}</Text>
@@ -159,7 +161,6 @@ function BookList(props){
                 <FlatButton onPress={() => sortYear("DESC")}>Sort by Year Descending</FlatButton>
                 <FlatButton onPress={() => sortRating("ASC")}>Sort by Rating Ascending</FlatButton>
                 <FlatButton onPress={() => sortRating("DESC")}>Sort by Rating Descending</FlatButton>
-
                 <FlatButton onPress={clearSort}>Clear Sort</FlatButton>
             </View>
             <FlatList

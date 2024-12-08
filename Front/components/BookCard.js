@@ -44,6 +44,7 @@ return(
     <Pressable onPress={props.onPress}>
         <Text>{props.currentItem.title}</Text>
     </Pressable>
+    <Text>Average Rating: {props.currentItem.avg_rating}</Text>
     <Text>pages: {props.currentItem.numOfPages}</Text>
     <Text>Publication Date: {props.currentItem.publicationDate}</Text>
     <Text>isbn13:{props.currentItem.isbn13}</Text>

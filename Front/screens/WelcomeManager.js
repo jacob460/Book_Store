@@ -32,6 +32,7 @@ function WelcomeManager(props){
         <Button title="Logout" onPress={handleLogout}/>
         <Button title="Dashboard" onPress={() => props.navigation.navigate("Dashboard")}/>
         <Button title="Store" onPress={() => props.navigation.navigate("BookStore List")}/>
+        <Button title="Profiles" onPress={() => props.navigation.navigate("CustomerList")}/>
         {editInfo == true 
         ?   (<View style={{marginVertical:15,}}>
             <FormField label="First Name" secure={false} capitalize={"words"} textChange={setFname} info={ctx.email}></FormField>

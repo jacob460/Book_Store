@@ -18,7 +18,7 @@ CREATE TABLE Book_Publisher (isbn13 CHAR(13),publisher varchar(255),  primary ke
 CREATE TABLE Languages (languages varchar(255), primary key (languages)); 
 CREATE TABLE Book_Language (isbn13 CHAR(13),languages varchar(255),  primary key (languages, isbn13), FOREIGN KEY(isbn13) REFERENCES BookData(isbn13), foreign key (languages) references Languages(languages)); 
 
-CREATE TABLE Customers (customerID BIGINT AUTO_INCREMENT NOT NULL, username varchar(255) NOT NULL, fname varchar(255) NOT NULL, lname varchar(255) NOT NULL, password varchar(255) NOT NULL, address varchar(255) NOT NULL, phoneNumber varchar(15) NOT NULL, PRIMARY KEY(customerID)); 
+CREATE TABLE Customers (customerID BIGINT AUTO_INCREMENT NOT NULL, username varchar(255) NOT NULL UNIQUE, fname varchar(255) NOT NULL, lname varchar(255) NOT NULL, password varchar(255) NOT NULL, address varchar(255) NOT NULL, phoneNumber varchar(15) NOT NULL, PRIMARY KEY(customerID)); 
 
 CREATE TABLE Orders (customerID BIGINT NOT NULL, orderID BIGINT AUTO_INCREMENT NOT NULL, total DOUBLE(65,2) NOT NULL, dateOrdered DATE NOT NULL, PRIMARY KEY(orderID, customerID), FOREIGN KEY (customerID) REFERENCES Customers (customerID)); 
 

@@ -226,10 +226,52 @@ app.get('/editStock', async(req, res)=>{
 })
 
 app.get('/reviews', async(req, res) =>{
-    var result = ''
-    result = await queryBookstore(`select reviewID, username, rating, commentText from reviews join customers on reviews.customerID=customers.customerID where isbn13=\"${req.query.isbn13}\"`)
+    var result
+    result = await queryBookstore(`select reviewID, username, rating, commentText, isbn13 from reviews join customers on reviews.customerID=customers.customerID where isbn13=\"${req.query.isbn13}\"`)
     console.log(result)
     res.send(result)
+})
+
+app.get('/determineUsefulness', async (req, res) => {
+    const result = await queryBookstore(`SELECT usefulness FROM commentusefulness WHERE reviewID=${req.query.reviewID}`)
+    res.send(result)
+})
+
+app.get('/profilesList', async(req, res) =>{
+    const result = await queryBookstore(`SELECT username, customerID FROM customers`)
+    res.send(result)
+})
+
+app.get('/customerReviews', async(req, res) => {
+    console.log("Customer reviews")
+    const result = await queryBookstore(`SELECT * FROM reviews JOIN bookdata ON reviews.isbn13=bookdata.isbn13 WHERE reviews.customerID=${req.query.customerID}`)
+    console.log(result)
+    res.send(result)
+})
+
+app.get('/review', async(req, res) =>{
+    var result = ""
+    var tempData
+    var avgRating, reviewCount
+    console.log(req.query.rating)
+    result = await queryBookstore(`INSERT INTO reviews (customerID, commentText, rating, isbn13) VALUES (${req.query.customerID}, \"${req.query.commentText}\", ${req.query.rating}, \"${req.query.isbn13}\")`)
+    tempData = await queryBookstore(`SELECT avg_rating, rating_count FROM bookdata WHERE isbn13=\"${req.query.isbn13}\"`)
+    console.log(tempData[0][0])
+    avgRating = ((tempData[0][0].avg_rating * tempData[0][0].rating_count) + parseInt(req.query.rating))/(tempData[0][0].rating_count+1)
+    reviewCount = tempData[0][0].rating_count + 1
+    await queryBookstore(`UPDATE bookdata SET avg_rating=${avgRating}, rating_count=${reviewCount} WHERE isbn13=\"${req.query.isbn13}\"`)
+    res.send(result)
+})
+
+app.get('/usefullness', async(req, res) => {
+    var exists = await queryBookstore(`SELECT * FROM commentusefulness WHERE customerID=${req.query.customerID} AND reviewID=${req.query.reviewID}`)
+    console.log(exists[0])
+    if(exists[0].length == 0){
+        await queryBookstore(`INSERT INTO commentusefulness VALUES (${req.query.customerID}, ${req.query.reviewID}, \"${req.query.usefulness}\")`)
+    }else{
+        await queryBookstore(`UPDATE commentusefulness SET usefulness=\"${req.query.usefulness}\" WHERE customerID=${req.query.customerID} AND reviewID=${req.query.reviewID}`)
+    }
+    res.send(exists)
 })
 
 app.get('/addCart', async(req, res)=>{
