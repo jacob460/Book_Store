@@ -15,28 +15,14 @@ var pool = mysql.createPool({
     password: "Mechromancer1427",
     database: "bookstore", 
 }).promise();
-    /*var pool = mysql.createPool({
-        host: "localhost",
-        user: "s",
-        password: "password",
-        database: "bookstore",
-    }).promise();
-        console.log(error)
-    */
+  
 export async function tryConnection(username, password){
     var test
-    /*pool = mysql.createPool({
-        host: "localhost",
-        user: "supermanager",
-        password: "password",
-        database: "bookstore", 
-    }).promise();*/
-    
     //const test = pool.query(`SELECT * FROM customers WHERE username=\"${username}\" AND password=\"${password}\"` );
-        test = await pool.query(`SELECT * FROM customers WHERE username=\"${username}\" AND password=\"${password}\"` );
+        test = await pool.query(`SELECT * FROM customers WHERE username=\"${username}\" AND password=sha2(\"${password}\", 256)` );
         console.log(test[0].length)
     if(test[0].length == 0){
-        test = await pool.query(`SELECT * FROM managers WHERE username=\"${username}\" AND password=\"${password}\"` );
+        test = await pool.query(`SELECT * FROM managers WHERE username=\"${username}\" AND password=sha2(\"${password}\", 256)` );
         test.push({isManager:true})
     }else{
         test.push({isManager:false})
@@ -47,20 +33,8 @@ export async function tryConnection(username, password){
     return(test)
 }
 export async function createUser(username, fname, lname, password, addr, phoneNum){
-    /*pool = mysql.createPool({
-        host: "127.0.0.1",
-        user: "root",
-        password: "Mechromancer1427",
-        database: "bookstore", 
-    }).promise();*/
     console.log("CREATE USER:")
-    console.log(username);
-    console.log(password);
-    console.log(addr);
-    console.log(fname);
-    console.log(lname);
-    console.log(phoneNum);
-    const test = pool.query(`insert into customers (username, fname, lname, password, address, phoneNumber)values (\"${username}\", \"${fname}\", \"${lname}\", \"${password}\", \"${addr}\", \"${phoneNum}\")`);
+    const test = pool.query(`insert into customers (username, fname, lname, password, address, phoneNumber)values (\"${username}\", \"${fname}\", \"${lname}\", sha2(\"${password}\", 256), \"${addr}\", \"${phoneNum}\")`);
 
     return(test)
 
@@ -74,13 +48,7 @@ export async function createManager(username, fname, lname, password, addr, phon
         database: "bookstore", 
     }).promise();*/
     console.log("CREATE MANAGER:")
-    console.log(username);
-    console.log(password);
-    console.log(addr);
-    console.log(fname);
-    console.log(lname);
-    console.log(phoneNum);
-    const test = pool.query(`insert into managers (username, fname, lname, password, address, phoneNumber)values (\"${username}\", \"${fname}\", \"${lname}\", \"${password}\", \"${addr}\", \"${phoneNum}\")`);
+    const test = pool.query(`insert into managers (username, fname, lname, password, address, phoneNumber)values (\"${username}\", \"${fname}\", \"${lname}\", sha2(\"${password}\", 256), \"${addr}\", \"${phoneNum}\")`);
     return(test)
 }
 

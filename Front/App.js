@@ -21,6 +21,7 @@ import Statistics from './screens/Statistics';
 import StockManagement from './screens/StockManagement';
 import Cart from './screens/Cart';
 import PurchaseHistory from './screens/PurchaseHistory';
+import RegisterBook from './screens/RegisterBook';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ function ManAuthStack(){
       <Stack.Screen name="ManRegister" component={ManRegister}/>
       <Stack.Screen name="StockManagement" component={StockManagement}/>
       <Stack.Screen name="Statistics" component={Statistics}/>
+      <Stack.Screen name="RegisterBook" component={RegisterBook}/>
     </Stack.Navigator>);
 }
 

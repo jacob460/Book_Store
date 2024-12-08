@@ -102,7 +102,82 @@ function parseResult(data){
 }
 
 app.get('/editStock', async(req, res)=>{
-    const result = await queryBookstore(`UPDATE bookdata SET Stock=${req.query.newValue} WHERE isbn13=\"${req.query.isbn13}\"`);
+    var result = "test"
+    var query = ""
+    console.log(req.query)
+    //console.log(req.query.authors)
+    if(req.query.action == 'ADD BOOK'){
+        result = await queryBookstore(`INSERT INTO bookdata VALUES (\"${req.query.isbn10}\", \"${req.query.isbn13}\", \"${req.query.title}\", \"${req.query.publicationDate}\", ${req.query.numOfPages}, ${req.query.Stock}, ${req.query.Price})`)
+        console.log(result[0].length)
+        for(var i = 0; i < req.query.authors.length; i++){
+            result = await queryBookstore(`select * from authors where author=\"${req.query.authors[i]}\"`)
+            console.log(result[0].length)
+            if(result[0].length == 0){
+                await queryBookstore(`insert into authors values (\"${req.query.authors[i]}\")`)
+            }
+            if(i == result.length-1){
+                query = query + `(\"${req.query.isbn13}\", \"${req.query.authors[i]}\")`
+            }else{
+                query = query + `(\"${req.query.isbn13}\", \"${req.query.authors[i]}\"), `
+            }
+        }
+        await queryBookstore(`INSERT INTO book_author VALUES ${query}`)
+        query = ""
+        for(var i = 0; i < req.query.publishers.length; i++){
+            result = await queryBookstore(`select * from publishers where publishers=\"${req.query.publishers[i]}\"`)
+            if(result[0].length == 0){
+                await queryBookstore(`insert into publishers values (\"${req.query.publishers[i]}\")`)
+            }
+            if(i == result.length-1){
+                query = query + `(\"${req.query.isbn13}\", \"${req.query.publishers[i]}\") `
+            }else{
+                query = query + `(\"${req.query.isbn13}\", \"${req.query.publishers[i]}\"), `
+            }
+        }
+        await queryBookstore(`INSERT INTO book_publisher VALUES ${query}`)  
+        query = ""
+        for(var i = 0; i < req.query.genres.length; i++){
+            result = await queryBookstore(`select * from genres where genre=\"${req.query.genres[i]}\"`)
+            if(result[0].length == 0){
+                await queryBookstore(`insert into genres values (\"${req.query.genres[i]}\")`)
+            }
+            if(i == result.length-1){
+                query = query + `(\"${req.query.isbn13}\", \"${req.query.genres[i]}\")`
+            }else{
+                query = query + `(\"${req.query.isbn13}\", \"${req.query.genres[i]}\"), `
+            }
+        }
+        await queryBookstore(`INSERT INTO book_genre VALUES ${query}`) 
+        query = ""
+        for(var i = 0; i < req.query.keywords.length; i++){
+            result = await queryBookstore(`select * from keywords where keyword=\"${req.query.keywords[i]}\"`)
+            if(result[0].length == 0){
+                await queryBookstore(`insert into keywords values (\"${req.query.keywords[i]}\")`)
+            }
+            if(i == result.length-1){
+                query = query + `(\"${req.query.isbn13}\", \"${req.query.keywords[i]}\") `
+            }else{
+                query = query + `(\"${req.query.isbn13}\", \"${req.query.keywords[i]}\"), `
+            }
+        }
+        await queryBookstore(`INSERT INTO book_keyword VALUES ${query}`)
+        query = ""
+        for(var i = 0; i < req.query.languages.length; i++){
+            result = await queryBookstore(`select * from languages where languages=\"${req.query.languages[i]}\"`)
+            if(result[0].length == 0){
+                await queryBookstore(`insert into languages values (\"${req.query.languages[i]}\")`)
+            }
+            if(i == result.length-1){
+                query = query + `(\"${req.query.isbn13}\", \"${req.query.languages[i]}\") `
+            }else{
+                query = query + `(\"${req.query.isbn13}\", \"${req.query.languages[i]}\"), `
+            }
+        }
+        await queryBookstore(`INSERT INTO book_language VALUES ${query}`)   
+    }else{
+    //const result = await queryBookstore(`UPDATE bookdata SET Stock=${req.query.newValue} WHERE isbn13=\"${req.query.isbn13}\"`);
+    }
+    result = "done"
     return result
 })
 

@@ -15,7 +15,7 @@ function BookCard(props){
   const [cart,  setCart] = useState(true)
 
   async function changeStock(){
-    const requestdata = await axios.get("http://localhost:8080/editStock", {params: {newValue:stockValue, isbn13:props.currentItem.isbn13}})
+    const requestdata = await axios.get("http://localhost:8080/editStock", {params: {action: "CHANGE STOCK", newValue:stockValue, isbn13:props.currentItem.isbn13}})
   }
 
   function checkStock(){

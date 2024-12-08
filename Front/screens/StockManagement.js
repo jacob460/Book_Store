@@ -45,9 +45,7 @@ function StockManagement(props){
     },[])
 
     function renderCard(data){
-        var current = data.item
-        //select * from bookdata inner join book_author where bookdata.isbn13=book_author.isbn13 AND bookdata.isbn13="0073999140774";
-        
+        var current = data.item     
         return(
         <BookCard currentItem={current} manager={ctx.manager} onPress={() => props.navigation.navigate("BookData", {current})}/>
         )
@@ -77,9 +75,9 @@ function StockManagement(props){
 
     return(<View >
         <Text>BOOKSTORE LIST : {amount}</Text>
-        <Text>{dimensions.window.height}</Text>
         <TextInput onChangeText={assignSize}></TextInput>
         <Button title="Per Page" onPress={changePerPage}/>
+        <Button title="Add Book" onPress={() => props.navigation.navigate("RegisterBook")}/>
         {isLoaded ? 
         <View style={{maxHeight: dimensions.window.height-200}}>
             <FlatList

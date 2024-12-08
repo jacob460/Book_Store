@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet} from "react-native";
+import { TextInput, View, Text, StyleSheet } from "react-native-web";
 
 function FormField(props){
 
@@ -8,7 +8,7 @@ function FormField(props){
         <TextInput style={[styles.textInputFields]} 
         onChangeText={props.textChange}
         secureTextEntry={props.secure}
-        keyboardType={props.keyboard}
+        inputMode={props.keyboard}
         autoCapitalize={props.capitalize}
         value={props.info}
         ></TextInput>

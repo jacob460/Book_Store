@@ -81,7 +81,7 @@ function BookList(props){
         <TextInput onChangeText={assignSize}></TextInput>
         <Button title="Per Page" onPress={changePerPage}/>
         {isLoaded ? 
-        <View style={{maxHeight: dimensions.window.height - 200}}>
+        <View style={{height: dimensions.window.height - 200}}>
             <FlatList
             persistentScrollbar={true}
             data={data}
