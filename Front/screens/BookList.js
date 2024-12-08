@@ -26,6 +26,7 @@ function BookList(props){
       const [publisher, setPublisher] = useState("")
       const [language, setLanguage] = useState("")
       const [title, setTitle] = useState("")
+      const [sort, setSort] = useState("")
     
       useEffect(() => {
         const subscription = Dimensions.addEventListener(
@@ -42,14 +43,7 @@ function BookList(props){
     const [isLoaded, setIsLoaded] = useState(false)
 
     useEffect(() => {
-        /*async function grabData(){
-            const requestdata = await axios.get("http://localhost:8080/bookList", {params: {page: index, size: amount}})
-            setData(requestdata.data[0])      
-            console.log(requestdata.data[0])
-            setIsLoaded(true)
-        }
-        grabData()
-        */handleSubmit()
+        handleSubmit()
     },[ctx.cart])
 
     function renderCard(data){
@@ -125,13 +119,23 @@ function BookList(props){
         removeErroneousWhitespace(languages)
         console.log(publishers)
         const requestdata = await axios.get("http://localhost:8080/bookList", {params: {page: index, size: amount,
-            publishers: publishers, genres: genres, authors: authors, languages: languages, title: title},
+            publishers: publishers, genres: genres, authors: authors, languages: languages, title: title, sort: sort},
             paramsSerializer: {
                 indexes: null, // use brackets with indexes
             }})
         setData(requestdata.data[0])      
         console.log(requestdata.data[0])
         setIsLoaded(true)
+    }
+
+    function sortYear(direction){
+        setSort(`publicationDate ${direction}`)
+    }
+    function sortRating(direction){
+        setSort(`rating ${direction}`)
+    }
+    function clearSort(){
+        setSort("")
     }
 
     return(<View >
@@ -149,7 +153,15 @@ function BookList(props){
             <FormField label="Genres" secure={false} textChange={setGenre} info={genre}/>
             <FormField label="Languages" secure={false} textChange={setLanguage} info={language}/>
             </View>
-            <FlatButton onPress={handleSubmit}>Submit</FlatButton>
+            <View style={{flexDirection: 'row'}}>
+                <FlatButton onPress={handleSubmit}>Submit</FlatButton>
+                <FlatButton onPress={() => sortYear("ASC")}>Sort by Year Ascending</FlatButton>
+                <FlatButton onPress={() => sortYear("DESC")}>Sort by Year Descending</FlatButton>
+                <FlatButton onPress={() => sortRating("ASC")}>Sort by Rating Ascending</FlatButton>
+                <FlatButton onPress={() => sortRating("DESC")}>Sort by Rating Descending</FlatButton>
+
+                <FlatButton onPress={clearSort}>Clear Sort</FlatButton>
+            </View>
             <FlatList
             persistentScrollbar={true}
             data={data}

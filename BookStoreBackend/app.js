@@ -75,6 +75,9 @@ app.get('/bookList', async (req, res)=>{
             query = query + " AND " + pQuery[i]
         }
     }
+    if(req.query.sort != ""){
+        query = query + ` ORDER BY ${req.query.sort}`
+    }
     console.log(query)
     //JOIN book_author ON bookdata.isbn13=book_author.isbn13
     const result = await queryBookstore(`SELECT * FROM bookdata ${query} LIMIT ${limit} offset ${offset}`);
@@ -219,6 +222,13 @@ app.get('/editStock', async(req, res)=>{
     }else{
     result = await queryBookstore(`UPDATE bookdata SET Stock=${req.query.newValue} WHERE isbn13=\"${req.query.isbn13}\"`);
     }
+    res.send(result)
+})
+
+app.get('/reviews', async(req, res) =>{
+    var result = ''
+    result = await queryBookstore(`select reviewID, username, rating, commentText from reviews join customers on reviews.customerID=customers.customerID where isbn13=\"${req.query.isbn13}\"`)
+    console.log(result)
     res.send(result)
 })
 
