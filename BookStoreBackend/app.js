@@ -4,39 +4,80 @@ import cors from 'cors'
 
 const app = express();
 
+function PartialQuery(data, dataName){
+    console.log(dataName)
+    var partialQuery = ""
+    var firstElementFound = false
+    for(var i = 0; i < data.length; i++){
+        if(data[i]!= ''){
+            if(firstElementFound == false){
+                partialQuery = `(LOWER(${dataName}) LIKE LOWER(\"%${data[i]}%\")`
+                firstElementFound = true
+            }else{
+                partialQuery = partialQuery + ` OR LOWER(${dataName}) LIKE LOWER(\"%${data[i]}%\")`
+            }
+            if(i == data.length-1){
+                partialQuery = partialQuery + ")"
+            }
+        }
+    }
+    console.log(partialQuery)
+    return partialQuery
+}
+
 app.use(cors())
 
 app.get('/', async (req, res)=>{
-    console.log(req.query.username)
-    console.log(req.query.password)
-    //const result = await queryBookstore("SELECT * FROM bookdata LIMIT 10");
-    //console.log(result[0])
     const result = await tryConnection(req.query.username, req.query.password);
-    //console.log(result)
-    
     res.send(result)
 })
 
 app.get('/signUp', async (req, res)=>{
-    console.log(req.query)
-    console.log(req.query.username) 
-    console.log(req.query.fname) 
-    console.log(req.query.lname)
-    console.log(req.query.password) 
-    console.log(req.query.addr) 
-    console.log(req.query.phoneNum)
-    //const result = await queryBookstore("SELECT * FROM bookdata LIMIT 10");
-    //console.log(result[0])
     await createUser(req.query.username, req.query.fname, req.query.lname, req.query.password, req.query.addr, req.query.phoneNum);
     const customerID = await queryBookstore(`SELECT customerID FROM customers WHERE username=\"${req.query.username}\"`)    
     res.send(customerID)
 })
 
 app.get('/bookList', async (req, res)=>{
-    console.log(req.query.page)
+    console.log(req.query)
     const limit = req.query.size
     const offset = req.query.page*limit
-    const result = await queryBookstore(`SELECT * FROM bookdata LIMIT ${limit} offset ${offset}`);
+    var query = ""
+    var pQuery = []
+    var joinQuery = []
+    if(req.query.authors[1] != '' || req.query.authors[0]!=''){
+        pQuery.push(PartialQuery(req.query.authors, 'author'))
+        joinQuery.push(` JOIN book_author ON bookdata.isbn13=book_author.isbn13 `)
+    }
+    if(req.query.languages[1] != '' || req.query.languages[0]!=''){
+        pQuery.push(PartialQuery(req.query.languages, 'languages'))
+        joinQuery.push(` JOIN book_language ON bookdata.isbn13=book_language.isbn13 `)
+    }
+    if(req.query.genres[1] != '' || req.query.genres[0]!=''){
+        pQuery.push(PartialQuery(req.query.genres, 'genre'))
+        joinQuery.push(` JOIN book_genre ON bookdata.isbn13=book_genre.isbn13 `)
+    }
+    if(req.query.publishers[1] != '' || req.query.publishers[0]!=''){
+        pQuery.push(PartialQuery(req.query.publishers, 'publisher'))
+        joinQuery.push( ` JOIN book_publisher ON bookdata.isbn13=book_publisher.isbn13 `)
+    }
+    if(req.query.title != ''){
+        pQuery.push(" (LOWER(title) LIKE LOWER(\"%" + req.query.title + "%\"))")
+    }
+    console.log(pQuery)
+    for(var i = 0; i < joinQuery.length; i++){
+        query = query + joinQuery[i]
+    }
+    for(var i = 0; i < pQuery.length; i++){
+        if(i == 0){
+            query = query + "WHERE " + pQuery[i]
+        }else{
+            query = query + " AND " + pQuery[i]
+        }
+    }
+    console.log(query)
+    //JOIN book_author ON bookdata.isbn13=book_author.isbn13
+    const result = await queryBookstore(`SELECT * FROM bookdata ${query} LIMIT ${limit} offset ${offset}`);
     res.send(result)
 })
 
@@ -92,6 +133,7 @@ app.get('/bookDetails', async(req, res)=>{
     console.log(result)
     res.send(result)
 })
+
 function parseResult(data){
     var result= data[0].author
     for(var i = 1; i < data.length; i++){
@@ -102,7 +144,7 @@ function parseResult(data){
 }
 
 app.get('/editStock', async(req, res)=>{
-    var result = "test"
+    var result = ""
     var query = ""
     console.log(req.query)
     //console.log(req.query.authors)
@@ -175,10 +217,9 @@ app.get('/editStock', async(req, res)=>{
         }
         await queryBookstore(`INSERT INTO book_language VALUES ${query}`)   
     }else{
-    //const result = await queryBookstore(`UPDATE bookdata SET Stock=${req.query.newValue} WHERE isbn13=\"${req.query.isbn13}\"`);
+    result = await queryBookstore(`UPDATE bookdata SET Stock=${req.query.newValue} WHERE isbn13=\"${req.query.isbn13}\"`);
     }
-    result = "done"
-    return result
+    res.send(result)
 })
 
 app.get('/addCart', async(req, res)=>{

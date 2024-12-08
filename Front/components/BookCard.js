@@ -16,6 +16,7 @@ function BookCard(props){
 
   async function changeStock(){
     const requestdata = await axios.get("http://localhost:8080/editStock", {params: {action: "CHANGE STOCK", newValue:stockValue, isbn13:props.currentItem.isbn13}})
+    console.log("STOCK")
   }
 
   function checkStock(){
@@ -48,13 +49,16 @@ return(
     <Text>isbn13:{props.currentItem.isbn13}</Text>
     <Text>isbn10:{props.currentItem.isbn10}</Text>
     <Text>${props.currentItem.Price}</Text>
-    <Text>{stockValue}</Text>
-    <Text>{props.manager}</Text>
-    {props.manager?
+    {ctx.manager?
       <View>
-        <FormField label="Stock" secure={false} capitalize={"words"} textChange={setStockValue} info={stockValue}/>
-        <Button title="Submit Stock" onPress={()=>changeStock()}/>
+        { props.page == "store"? null
+        :<View>
+          <FormField label="Stock" secure={false} capitalize={"words"} textChange={setStockValue} info={stockValue}/>
+          <Button title="Submit Stock" onPress={()=>changeStock()}/>
+        </View>
+        }
       </View>
+    
     : <View>
         <Text>{inStock}</Text>
         {inStock == "Out of Stock" ? null : <Button title="Add to Cart" onPress={addCart} />}
