@@ -30,7 +30,7 @@ CREATE TABLE UserTrust (customerID BIGINT NOT NULL, trustedID BIGINT NOT NULL, i
 
 create table CommentUsefulness (customerID BIGINT NOT NULL, reviewID BIGINT NOT NULL, usefulness ENUM ("useless", "useful", "very useful") NOT NULL, primary key(customerID, reviewID), foreign key (reviewID) references Reviews(reviewID), foreign key (customerID) references Customers(customerID));
 
-create table Managers (managerID BIGINT AUTO_INCREMENT, username varchar(255) NOT NULL, fname varchar(255) NOT NULL, lname varchar(255) NOT NULL, password varchar(255)NOT NULL, address varchar(255) NOT NULL, phoneNumber varchar(15) NOT NULL, PRIMARY KEY(managerID));
+create table Managers (managerID BIGINT AUTO_INCREMENT, username varchar(255) NOT NULL unique, fname varchar(255) NOT NULL, lname varchar(255) NOT NULL, password varchar(255)NOT NULL, address varchar(255) NOT NULL, phoneNumber varchar(15) NOT NULL, PRIMARY KEY(managerID));
 
 create table Cart (customerID BIGINT, isbn13 char(13), amount int, primary key(isbn13, customerID, amount), foreign key (customerID) REFERENCES Customers(customerID), foreign key (isbn13) REFERENCES BookData(isbn13));
 
