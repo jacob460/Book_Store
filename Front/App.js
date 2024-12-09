@@ -24,6 +24,7 @@ import PurchaseHistory from './screens/PurchaseHistory';
 import RegisterBook from './screens/RegisterBook';
 import CustomerProfile from './screens/CustomerProfile';
 import CustomerList from './screens/CustomerList';
+import CustomerProfileMan from './screens/CustomerProfileMan';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,7 +39,7 @@ function ManAuthStack(){
       <Stack.Screen name="StockManagement" component={StockManagement}/>
       <Stack.Screen name="Statistics" component={Statistics}/>
       <Stack.Screen name="RegisterBook" component={RegisterBook}/>
-      <Stack.Screen name="CustomerProfile" component={CustomerProfile}/>
+      <Stack.Screen name="CustomerProfileMan" component={CustomerProfileMan}/>
       <Stack.Screen name="CustomerList" component={CustomerList}/>
     </Stack.Navigator>);
 }

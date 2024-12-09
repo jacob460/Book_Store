@@ -56,7 +56,6 @@ const renderSectionHeader = ({ section: { orderID, dateOrdered, price } }) => (
     return(
         <View>
             <Text>Purchase History</Text>
-            <Button title='TEST' onPress={()=> { console.log("pressed"); console.log(DATA[0].data[0].dateOrdered)}}/>
             {isLoaded ?
             <View style={{maxHeight: dimensions.window.height - 200}}>
                 <SectionList

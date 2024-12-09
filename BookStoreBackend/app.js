@@ -92,7 +92,6 @@ app.get('/addManager', async(req, res)=>{
 app.get('/bookDetails', async(req, res)=>{
     var resultpart, temp
     var result = []
-    //var result = await queryBookstore(`SELECT * FROM bookdata WHERE isbn13=\"${req.query.isbn13}\"`);
     resultpart = await queryBookstore(`SELECT author FROM Book_Author WHERE isbn13=\"${req.query.isbn13}\"`)
         console.log(resultpart)
         console.log(resultpart[0][0].author)
@@ -150,7 +149,6 @@ app.get('/editStock', async(req, res)=>{
     var result = ""
     var query = ""
     console.log(req.query)
-    //console.log(req.query.authors)
     if(req.query.action == 'ADD BOOK'){
         result = await queryBookstore(`INSERT INTO bookdata VALUES (\"${req.query.isbn10}\", \"${req.query.isbn13}\", \"${req.query.title}\", \"${req.query.publicationDate}\", ${req.query.numOfPages}, ${req.query.Stock}, ${req.query.Price})`)
         console.log(result[0].length)
@@ -378,17 +376,30 @@ app.get('/test', async(req,res)=>{
 })
 
 app.get('/trust', async(req, res) =>{
-    const numTrusted = await queryBookstore(`SELECT COUNT(isTrusted) AS count FROM usertrust WHERE trustedID=${req.query.trustedID} AND isTrusted=true`)
-    res.send(numTrusted)
+    var response = []
+    const numTrusted = await queryBookstore(`SELECT COUNT(isTrusted) AS countTrusted FROM usertrust WHERE trustedID=${req.query.trustedID} AND isTrusted=true`)
+    const numUntrusted = await queryBookstore(`SELECT COUNT(isTrusted) AS countUntrusted FROM usertrust WHERE trustedID=${req.query.trustedID} AND isTrusted=false`)
+    const userTrusted = await queryBookstore(`SELECT isTrusted FROM usertrust WHERE customerID=${req.query.userID} AND trustedID=${req.query.trustedID}`)
+    response.push(numTrusted[0][0])
+    response.push(numUntrusted[0][0])
+    response.push(userTrusted[0][0])
+    res.send(response)
 })
 
 app.get('/cancelTrust', async(req, res) =>{
+    var response = []
     await queryBookstore(`DELETE FROM usertrust WHERE customerID=${req.query.userID} AND trustedID=${req.query.trustedID}`).catch(error => console.log(error))
-    const numTrusted = await queryBookstore(`SELECT COUNT(isTrusted) AS count FROM usertrust WHERE trustedID=${req.query.trustedID} AND isTrusted=true`)
-    res.send(numTrusted)
+    const numTrusted = await queryBookstore(`SELECT COUNT(isTrusted) AS countTrusted FROM usertrust WHERE trustedID=${req.query.trustedID} AND isTrusted=true`)
+    const numUntrusted = await queryBookstore(`SELECT COUNT(isTrusted) AS countUntrusted FROM usertrust WHERE trustedID=${req.query.trustedID} AND isTrusted=false`)
+    const userTrusted = await queryBookstore(`SELECT isTrusted FROM usertrust WHERE customerID=${req.query.userID} AND trustedID=${req.query.trustedID}`)
+    response.push(numTrusted[0][0])
+    response.push(numUntrusted[0][0])
+    response.push(userTrusted[0][0])
+    res.send(response)
 })
 
 app.get('/trustUser', async(req, res) => {
+    var response = []
     console.log(req.query.userID)
     console.log(req.query.trustedID)
     console.log(req.query.trust)
@@ -400,8 +411,32 @@ app.get('/trustUser', async(req, res) => {
         const result = await queryBookstore(`UPDATE usertrust SET isTrusted=${req.query.trust} WHERE customerID=${req.query.userID} AND trustedID=${req.query.trustedID}`)
 
     }
-    const numTrusted = await queryBookstore(`SELECT COUNT(isTrusted) AS count FROM usertrust WHERE trustedID=${req.query.trustedID} AND isTrusted=true`)
-    res.send(numTrusted)
+    const numTrusted = await queryBookstore(`SELECT COUNT(isTrusted) AS countTrusted FROM usertrust WHERE trustedID=${req.query.trustedID} AND isTrusted=true`)
+    const numUntrusted = await queryBookstore(`SELECT COUNT(isTrusted) AS countUntrusted FROM usertrust WHERE trustedID=${req.query.trustedID} AND isTrusted=false`)
+    console.log(numTrusted)
+    console.log(numUntrusted)
+    console.log(exists)
+    response.push(numTrusted[0][0])
+    response.push(numUntrusted[0][0])
+    if(exists[0].length == 0){
+        response.push({userTrusted: "N/A"})
+    }else{
+        response.push(exists[0][0])
+    }
+    res.send(response)
+})
+
+app.get('/profilesStat', async(req,res) =>{
+    const result = await queryBookstore(`SELECT * FROM customers JOIN (SELECT trustedID, COUNT(isTrusted) AS count FROM usertrust WHERE isTrusted=true GROUP BY trustedID) tr ON customers.customerID=tr.trustedID ORDER BY tr.count DESC`)
+    res.send(result)
+})
+app.get('/sales', async(req,res) => {
+    const result = await queryBookstore(`SELECT * FROM bookdata JOIN (SELECT isbn13, SUM(amount) AS count FROM ordercontents GROUP BY isbn13) sales on sales.isbn13=bookdata.isbn13 ORDER BY sales.count DESC LIMIT 15`)
+    res.send(result)
+})
+app.get('/getCustomerInfo', async(req,res) => {
+    const result = await queryBookstore(`SELECT * FROM customers WHERE customerID=${req.query.customerID}`)
+    res.send(result)
 })
 
 app.use((err, req, next) => {

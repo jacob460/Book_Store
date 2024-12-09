@@ -1,9 +1,7 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { View, Text, Button, Dimensions, FlatList, TextInput, Pressable} from "react-native";
-//import { FlatList } from "react-native-web";
 import BookCard from "../components/BookCard";
-import { useContext } from "react";
 import { AuthContext } from "../components/AuthContext";
 import FormField from "../components/FormField";
 import FlatButton from "../components/FlatButton";
@@ -13,7 +11,7 @@ const screenDimensions = Dimensions.get('screen');
 
 function StockManagement(props){
 
-    const ctx = useContext(AuthContext);
+    const ctx = useContext(AuthContext)
 
     const [dimensions, setDimensions] = useState({
         window: windowDimensions,
@@ -21,11 +19,14 @@ function StockManagement(props){
       });
       const [index, setIndex] = useState(0)
       const [amount, setAmount] = useState(15)
+      const [update, setUpdate] = useState(false)
       const [author, setAuthor] = useState("")
       const [genre, setGenre] = useState("")
+      const [keyword, setKeyword] = useState("")
       const [publisher, setPublisher] = useState("")
       const [language, setLanguage] = useState("")
       const [title, setTitle] = useState("")
+      const [sort, setSort] = useState("")
     
       useEffect(() => {
         const subscription = Dimensions.addEventListener(
@@ -42,19 +43,16 @@ function StockManagement(props){
     const [isLoaded, setIsLoaded] = useState(false)
 
     useEffect(() => {
-        async function grabData(){
-            const requestdata = await axios.get("http://localhost:8080/bookList", {params: {page: index, size: amount}})
-            setData(requestdata.data[0])      
-            console.log(requestdata.data[0])
-            setIsLoaded(true)
-        }
         handleSubmit()
-    },[])
+    },[ctx.cart])
 
     function renderCard(data){
-        var current = data.item     
+        var current = data.item
+        var color = "grey"
+        //select * from bookdata inner join book_author where bookdata.isbn13=book_author.isbn13 AND bookdata.isbn13="0073999140774";
+        if(current.Stock==0){ color = "red"}
         return(
-        <BookCard currentItem={current} manager={ctx.manager} onPress={() => props.navigation.navigate("BookData", {current})}/>
+        <BookCard color={color} page={"stock"} currentItem={current} onPress={() => props.navigation.navigate("BookData", {current})}/>
         )
     }
 
@@ -79,6 +77,7 @@ function StockManagement(props){
     function assignSize(txt){
         setAmount(txt)
     }
+
     function removeErroneousWhitespace(data){
         for(var i = 0; i < data.length; i++){
             data[i] = data[i].trim()
@@ -120,7 +119,7 @@ function StockManagement(props){
         removeErroneousWhitespace(languages)
         console.log(publishers)
         const requestdata = await axios.get("http://localhost:8080/bookList", {params: {page: index, size: amount,
-            publishers: publishers, genres: genres, authors: authors, languages: languages, title: title},
+            publishers: publishers, genres: genres, authors: authors, languages: languages, title: title, sort: sort},
             paramsSerializer: {
                 indexes: null, // use brackets with indexes
             }})
@@ -128,6 +127,18 @@ function StockManagement(props){
         console.log(requestdata.data[0])
         setIsLoaded(true)
     }
+
+    function sortYear(direction){
+        setSort(`publicationDate ${direction}`)
+    }
+    function sortRating(direction){
+        setSort(`avg_rating ${direction}`)
+    }
+    function clearSort(){
+        setSort("")
+    }
+
+    
 
     return(<View >
         <Text>BOOKSTORE LIST : {amount}</Text>
@@ -144,7 +155,14 @@ function StockManagement(props){
             <FormField label="Genres" secure={false} textChange={setGenre} info={genre}/>
             <FormField label="Languages" secure={false} textChange={setLanguage} info={language}/>
             </View>
-            <FlatButton onPress={handleSubmit}>Submit</FlatButton>
+            <View style={{flexDirection: 'row'}}>
+                <FlatButton onPress={handleSubmit}>Submit</FlatButton>
+                <FlatButton onPress={() => sortYear("ASC")}>Sort by Year Ascending</FlatButton>
+                <FlatButton onPress={() => sortYear("DESC")}>Sort by Year Descending</FlatButton>
+                <FlatButton onPress={() => sortRating("ASC")}>Sort by Rating Ascending</FlatButton>
+                <FlatButton onPress={() => sortRating("DESC")}>Sort by Rating Descending</FlatButton>
+                <FlatButton onPress={clearSort}>Clear Sort</FlatButton>
+            </View>
             <FlatList
             persistentScrollbar={true}
             data={data}

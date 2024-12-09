@@ -18,7 +18,6 @@ var pool = mysql.createPool({
   
 export async function tryConnection(username, password){
     var test
-    //const test = pool.query(`SELECT * FROM customers WHERE username=\"${username}\" AND password=\"${password}\"` );
         test = await pool.query(`SELECT * FROM customers WHERE username=\"${username}\" AND password=sha2(\"${password}\", 256)` );
         console.log(test[0].length)
     if(test[0].length == 0){
@@ -28,8 +27,6 @@ export async function tryConnection(username, password){
         test.push({isManager:false})
     }
         console.log(test[0].length)
-    //const test = queryBookstore("SELECT * FROM bookdata LIMIT 15")
-
     return(test)
 }
 export async function createUser(username, fname, lname, password, addr, phoneNum){
@@ -41,30 +38,13 @@ export async function createUser(username, fname, lname, password, addr, phoneNu
 }
 
 export async function createManager(username, fname, lname, password, addr, phoneNum){
-    /*pool = mysql.createPool({
-        host: "127.0.0.1",
-        user: "root",
-        password: "Mechromancer1427",
-        database: "bookstore", 
-    }).promise();*/
     console.log("CREATE MANAGER:")
     const test = pool.query(`insert into managers (username, fname, lname, password, address, phoneNumber)values (\"${username}\", \"${fname}\", \"${lname}\", sha2(\"${password}\", 256), \"${addr}\", \"${phoneNum}\")`);
     return(test)
 }
 
 export async function queryBookstore(query){
-
-    /*pool = mysql.createPool({
-        host: "127.0.0.1",
-        user: "root",
-        password: "Mechromancer1427",
-        database: "bookstore", 
-    }).promise();*/
     console.log(query)
     const result = await pool.query(query);
-    //console.log(result[0]);
     return(result);
 }
-
-//const notes = await queryBookstore("SELECT * FROM bookdata LIMIT 10");
-//console.log(notes);

@@ -42,16 +42,6 @@ function Welcome(props){
         <Button title="Cart" onPress={() => props.navigation.navigate("Cart")}/>
         <Button title="Purchase History" onPress={() => props.navigation.navigate("PurchaseHistory")}/>
         <Button title="Profiles" onPress={() => props.navigation.navigate("CustomerList")}/>
-        {editInfo == true 
-        ?   (<View style={{marginVertical:15,}}>
-            <FormField label="First Name" secure={false} capitalize={"words"} textChange={setFname} info={ctx.email}></FormField>
-            <FormField label="Last Name" secure={false} capitalize={"words"} textChange={setLname} info={ctx.password}></FormField>
-            <FormField label="Age Name" secure={false} textChange={setAge} keyboard={"number-pad"} info={user?.age}></FormField>
-            <View style={styles.buttons}>
-                <Button title={"Submit"} onPress={SubmitInfo}/>
-                <Button title={"Cancel"} onPress={()=>setEditInfo(!editInfo)}/>
-            </View>
-            </View>) : (<View style={styles.container}><Button title="Edit User Info" onPress={EditInformation}/></View>)}
     </View>)
 }
 

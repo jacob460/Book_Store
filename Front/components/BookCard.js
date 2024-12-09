@@ -50,6 +50,7 @@ return(
     <Text>isbn13:{props.currentItem.isbn13}</Text>
     <Text>isbn10:{props.currentItem.isbn10}</Text>
     <Text>${props.currentItem.Price}</Text>
+    {props.currentItem?.count ? <Text>Total Sold: {props.currentItem.count}</Text> : null}
     {ctx.manager?
       <View>
         { props.page == "store"? null

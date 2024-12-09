@@ -34,7 +34,6 @@ create table Managers (managerID BIGINT AUTO_INCREMENT, username varchar(255) NO
 
 create table Cart (customerID BIGINT, isbn13 char(13), amount int, primary key(isbn13, customerID, amount), foreign key (customerID) REFERENCES Customers(customerID), foreign key (isbn13) REFERENCES BookData(isbn13));
 
-insert into customers (username, fname, lname, password, address, phoneNumber)values ("username", "fname", "lname", sha2("password",256), "addr", "4129600050");
 insert into managers (username, fname, lname, password, address, phoneNumber)values ("supermanager", "fname", "lname", sha2("password",256), "addr", "4129600050");
 #CREATE USER 'supermanager'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
 #GRANT  UPDATE, DELETE,  INSERT, SELECT ON bookstore.* TO 'supermanager'@'localhost';
