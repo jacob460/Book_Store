@@ -377,6 +377,33 @@ app.get('/test', async(req,res)=>{
     res.send(customerID)
 })
 
+app.get('/trust', async(req, res) =>{
+    const numTrusted = await queryBookstore(`SELECT COUNT(isTrusted) AS count FROM usertrust WHERE trustedID=${req.query.trustedID} AND isTrusted=true`)
+    res.send(numTrusted)
+})
+
+app.get('/cancelTrust', async(req, res) =>{
+    await queryBookstore(`DELETE FROM usertrust WHERE customerID=${req.query.userID} AND trustedID=${req.query.trustedID}`).catch(error => console.log(error))
+    const numTrusted = await queryBookstore(`SELECT COUNT(isTrusted) AS count FROM usertrust WHERE trustedID=${req.query.trustedID} AND isTrusted=true`)
+    res.send(numTrusted)
+})
+
+app.get('/trustUser', async(req, res) => {
+    console.log(req.query.userID)
+    console.log(req.query.trustedID)
+    console.log(req.query.trust)
+    const exists = await queryBookstore(`SELECT * FROM usertrust WHERE customerID=${req.query.userID} AND trustedID=${req.query.trustedID}`)
+    console.log(exists[0].length)
+    if(exists[0].length == 0){
+        const result = await queryBookstore(`INSERT INTO usertrust VALUES (${req.query.userID}, ${req.query.trustedID}, ${req.query.trust})`)
+    }else{
+        const result = await queryBookstore(`UPDATE usertrust SET isTrusted=${req.query.trust} WHERE customerID=${req.query.userID} AND trustedID=${req.query.trustedID}`)
+
+    }
+    const numTrusted = await queryBookstore(`SELECT COUNT(isTrusted) AS count FROM usertrust WHERE trustedID=${req.query.trustedID} AND isTrusted=true`)
+    res.send(numTrusted)
+})
+
 app.use((err, req, next) => {
     //console.error(err.stack);
     //resizeBy.status(500).send('something broke!')
