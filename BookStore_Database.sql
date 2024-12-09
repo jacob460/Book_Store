@@ -18,9 +18,9 @@ CREATE TABLE Book_Publisher (isbn13 CHAR(13),publisher varchar(255),  primary ke
 CREATE TABLE Languages (languages varchar(255), primary key (languages)); 
 CREATE TABLE Book_Language (isbn13 CHAR(13),languages varchar(255),  primary key (languages, isbn13), FOREIGN KEY(isbn13) REFERENCES BookData(isbn13), foreign key (languages) references Languages(languages)); 
 
-CREATE TABLE Customers (customerID BIGINT AUTO_INCREMENT NOT NULL, username varchar(255) NOT NULL UNIQUE, fname varchar(255) NOT NULL, lname varchar(255) NOT NULL, password varchar(255) NOT NULL, address varchar(255) NOT NULL, phoneNumber varchar(15) NOT NULL, PRIMARY KEY(customerID)); 
+CREATE TABLE Customers (customerID BIGINT AUTO_INCREMENT NOT NULL, username varchar(255) NOT NULL, fname varchar(255) NOT NULL, lname varchar(255) NOT NULL, password varchar(255) NOT NULL, address varchar(255) NOT NULL, phoneNumber varchar(15) NOT NULL, PRIMARY KEY(customerID)); 
 
-CREATE TABLE Orders (customerID BIGINT NOT NULL, orderID BIGINT AUTO_INCREMENT NOT NULL, total DOUBLE(65,2) NOT NULL, dateOrdered DATE NOT NULL, PRIMARY KEY(orderID, customerID), FOREIGN KEY (customerID) REFERENCES Customers (customerID)); 
+CREATE TABLE Orders (customerID BIGINT NOT NULL, orderID BIGINT NOT NULL, total DOUBLE(65,2) NOT NULL, dateOrdered DATE NOT NULL, PRIMARY KEY(orderID, customerID), FOREIGN KEY (customerID) REFERENCES Customers (customerID)); 
 
 CREATE TABLE OrderContents (orderID BIGINT, isbn13 char(13), amount int, primary key (orderID, isbn13),FOREIGN KEY (orderID) REFERENCES Orders(orderID), FOREIGN KEY (isbn13) REFERENCES BookData(isbn13)); 
 
@@ -30,11 +30,12 @@ CREATE TABLE UserTrust (customerID BIGINT NOT NULL, trustedID BIGINT NOT NULL, i
 
 create table CommentUsefulness (customerID BIGINT NOT NULL, reviewID BIGINT NOT NULL, usefulness ENUM ("useless", "useful", "very useful") NOT NULL, primary key(customerID, reviewID), foreign key (reviewID) references Reviews(reviewID), foreign key (customerID) references Customers(customerID));
 
-create table Managers (managerID BIGINT AUTO_INCREMENT, username varchar(255) NOT NULL unique, fname varchar(255) NOT NULL, lname varchar(255) NOT NULL, password varchar(255)NOT NULL, address varchar(255) NOT NULL, phoneNumber varchar(15) NOT NULL, PRIMARY KEY(managerID));
+create table Managers (managerID BIGINT AUTO_INCREMENT, username varchar(255) NOT NULL, fname varchar(255) NOT NULL, lname varchar(255) NOT NULL, password varchar(255)NOT NULL, address varchar(255) NOT NULL, phoneNumber varchar(15) NOT NULL, PRIMARY KEY(managerID));
 
 create table Cart (customerID BIGINT, isbn13 char(13), amount int, primary key(isbn13, customerID, amount), foreign key (customerID) REFERENCES Customers(customerID), foreign key (isbn13) REFERENCES BookData(isbn13));
 
-insert into managers (username, fname, lname, password, address, phoneNumber)values ("supermanager", "fname", "lname", sha2("password",256), "addr", "4129600050");
+insert into customers (username, fname, lname, password, address, phoneNumber)values ("username", "fname", "lname","password", "addr", "4129600050");
+insert into managers (username, fname, lname, password, address, phoneNumber)values ("supermanager", "fname", "lname", "password", "addr", "4129600050");
 #CREATE USER 'supermanager'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
 #GRANT  UPDATE, DELETE,  INSERT, SELECT ON bookstore.* TO 'supermanager'@'localhost';
 

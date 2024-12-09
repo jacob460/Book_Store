@@ -12,7 +12,7 @@ import mysql from 'mysql2';
 var pool = mysql.createPool({
     host: "127.0.0.1",
     user: "root",
-    password: "Mechromancer1427",
+    password: "password",
     database: "bookstore", 
 }).promise();
   

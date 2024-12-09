@@ -1661,7 +1661,7 @@ INSERT INTO Publishers VALUES ('random house (vintage)');
 INSERT INTO Publishers VALUES ('findakly');
 INSERT INTO Publishers VALUES ('gingko press');
 INSERT INTO Publishers VALUES ('kiwi');
-INSERT INTO Publishers VALUES ('45583');
+INSERT INTO Publishers VALUES ('18-oct');
 INSERT INTO Publishers VALUES ('silhouette books');
 INSERT INTO Publishers VALUES ('mira');
 INSERT INTO Publishers VALUES ('island books');
