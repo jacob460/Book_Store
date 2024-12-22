@@ -150,7 +150,7 @@ app.get('/editStock', async(req, res)=>{
     var query = ""
     console.log(req.query)
     if(req.query.action == 'ADD BOOK'){
-        result = await queryBookstore(`INSERT INTO bookdata VALUES (\"${req.query.isbn10}\", \"${req.query.isbn13}\", \"${req.query.title}\", \"${req.query.publicationDate}\", ${req.query.numOfPages}, ${req.query.Stock}, ${req.query.Price})`)
+        result = await queryBookstore(`INSERT INTO bookdata VALUES (\"${req.query.isbn10}\", \"${req.query.isbn13}\", \"${req.query.title}\", \"${req.query.publicationDate}\", ${req.query.numOfPages}, ${req.query.Stock}, ${req.query.Price}, 0, 0)`)
         console.log(result[0].length)
         for(var i = 0; i < req.query.authors.length; i++){
             result = await queryBookstore(`select * from authors where author=\"${req.query.authors[i]}\"`)

@@ -4,7 +4,7 @@ import axios from "axios";
 
 async function auth(username, fname, lname, password, addr, phoneNum, action){
     const APIKEY ="AIzaSyBuC431Dg5Lh7oKDMwq7rXWxO-pjvrsoL4";
-    const url = `http://localhost:8080/${action}`;
+    const url = `http://127.0.0.1:8080/${action}`;
 
     console.log("CALLING AUTH");
 

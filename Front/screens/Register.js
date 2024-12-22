@@ -45,8 +45,6 @@ function Register(props){
             try{
                 const data = await createUser(username, fname, lname, password, address, phoneNum);
                 console.log("validated");
-                const test = await axios.get("http://localhost:8080/test"); 
-                console.log(test.data[0][0].customerID)
                 ctx.auth(username, false, data.data[0][0].customerID);
                 setAuthIssue("AUTH");
                 console.log(data.data)

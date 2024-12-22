@@ -144,6 +144,7 @@ function StockManagement(props){
         <Text>BOOKSTORE LIST : {amount}</Text>
         <TextInput onChangeText={assignSize}></TextInput>
         <Button title="Per Page" onPress={changePerPage}/>
+        <Button title="Add Book" onPress={() => props.navigation.navigate("RegisterBook")}/>
         {isLoaded ? 
         <View style={{height: dimensions.window.height - 200}}>
             <FormField label="Title" secure={false} textChange={setTitle} info={title}/>
