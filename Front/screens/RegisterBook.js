@@ -37,17 +37,18 @@ function RegisterBook(props){
     const [Price, setPrice] = useState(-1);
     const [inputError, setInputError] = useState("");
     const [multiFields, setMultiFields] = useState(false)
-    const [publishers, setPublishers] = useState([])
-    const [keywords, setKeywords] = useState([])
-    const [languages, setLanguages] = useState([])
-    const [authors, setAuthors] = useState([])
-    const [genres, setGenres] = useState([])
+    const [publishers, setPublishers] = useState(["",])
+    const [keywords, setKeywords] = useState(["",])
+    const [languages, setLanguages] = useState(["",])
+    const [authors, setAuthors] = useState(["",])
+    const [genres, setGenres] = useState(["",])
     const [publisher, setPublisher] = useState("")
     const [keyword, setKeyword] = useState("")
     const [language, setLanguage] = useState("")
     const [author, setAuthor] = useState("")
     const [genre, setGenre] = useState("")
-
+    const [avgReviews, setAvgReviews] = useState(0)
+    const [numReviews, setNumReviews] = useState(0)
 
     async function handleSubmit(){
         if(isbn10.length != 10){
@@ -85,15 +86,15 @@ function RegisterBook(props){
     async function addBook(){
         const date = year + "-" + month + "-" + day
         console.log(date)
-        if(publishers.length == 0 ){
+        if(publishers.length == 1 ){
             setInputError("ADD AT LEAST ONE PUBLISHER")
-        }else if(genres.length == 0){
+        }else if(genres.length == 1){
             setInputError("ADD AT LEAST ONE GENRE")
-        }else if(authors.length == 0){
+        }else if(authors.length == 1){
             setInputError("ADD AT LEAST ONE AUTHOR")
-        }else if(keywords.length == 0){
+        }else if(keywords.length == 1){
             setInputError("ADD AT LEAST ONE KEYWORD")
-        }else if(languages.length == 0){
+        }else if(languages.length == 1){
             setInputError("ADD AT LEAST ONE LANGUAGE")
         }else{
             try{
@@ -101,7 +102,7 @@ function RegisterBook(props){
                     isbn10: isbn10, isbn13: isbn13, title: title, publicationDate: date,
                     numOfPages: numOfPages, Stock: Stock, Price: Price,
                     genres: genres, publishers: publishers, authors: authors,
-                    keywords: keywords, languages: languages
+                    keywords: keywords, languages: languages, avgReviews: avgReviews, numReviews: numReviews
                 }, paramsSerializer: {
                     indexes: null, // use brackets with indexes
                   }}); 
@@ -131,19 +132,21 @@ function RegisterBook(props){
                 <FormField label="numOfPages" secure={false} keyboard={"numeric"} textChange={setNumOfPages} info={numOfPages}/>
                 <FormField label="Stock" secure={false} keyboard={"numeric"} textChange={setStock} info={Stock}/>
                 <FormField label="Price" secure={false} keyboard={"decimal"} textChange={setPrice} info={Price}/>
+                <FormField label="Average Review" secure={false} textChange={setAvgReviews} info={avgReviews}/>
+                <FormField label="Number of Reviews" secure={false} textChange={setNumReviews} info={numReviews}/>
                 <FlatButton onPress={handleSubmit}>Register</FlatButton>
             </View>
             :
             <View>
-                <FormField label="Publisher" secure={false} keyboard={"numeric"} capitalize={"words"} textChange={setPublisher} info={publisher}/>
+                <FormField label="Publisher" secure={false} capitalize={"words"} textChange={setPublisher} info={publisher}/>
                 <FlatButton onPress={()=> {if(publisher.length != 0) {publishers.push(publisher); setPublisher("");}}}>Add Publisher</FlatButton>
-                <FormField label="Genre" secure={false} keyboard={"numeric"} capitalize={"words"} textChange={setGenre} info={genre}/>
+                <FormField label="Genre" secure={false} capitalize={"words"} textChange={setGenre} info={genre}/>
                 <FlatButton onPress={()=> {if(genre.length != 0) {genres.push(genre); setGenre("");}}}>Add Genre</FlatButton>
                 <FormField label="Author" secure={false} capitalize={"words"} textChange={setAuthor} info={author}/>
                 <FlatButton onPress={()=> {if(author.length != 0) {authors.push(author); setAuthor("");}}}>Add Author</FlatButton>
-                <FormField label="Keyword" secure={false} keyboard={"numeric"} capitalize={"words"} textChange={setKeyword} info={keyword}/>
+                <FormField label="Keyword" secure={false} capitalize={"words"} textChange={setKeyword} info={keyword}/>
                 <FlatButton onPress={()=> {if(keyword.length != 0) {keywords.push(keyword); setKeyword("");}}}>Add Keyword</FlatButton>
-                <FormField label="Language" secure={false} keyboard={"numeric"} capitalize={"words"} textChange={setLanguage} info={language}/>
+                <FormField label="Language" secure={false} capitalize={"words"} textChange={setLanguage} info={language}/>
                 <FlatButton onPress={()=> {if(language.length != 0) {languages.push(language); setLanguage("");}}}>Add Language</FlatButton>
                 <FlatButton onPress={addBook}>Register Book</FlatButton>
             </View>}
