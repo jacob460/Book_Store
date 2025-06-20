@@ -8178,7 +8178,7 @@ INSERT INTO BookData VALUES ('60545623','9780060545628','What Came Before He Sho
 INSERT INTO BookData VALUES ('60545615','9780060545611','With No One as Witness (Inspector Lynley  #13)','2006-02-28',784, 10, 10.00,4.04,9952 );
 INSERT INTO BookData VALUES ('553575090','9780553575095','Deception on His Mind (Inspector Lynley  #9)','1998-10-06',716, 10, 10.00,4.05,8028 );
 INSERT INTO BookData VALUES ('736904891','9780736904896','Becoming a Woman of Beauty and Strength: Esther','2001-01-01',160, 10, 10.00,4.27,80 );
-INSERT INTO BookData VALUES ('553575104','9780553575101','In Pursuit of the Proper Sinner (Inspector Lynley  #10)','2000-11-31',718, 10, 10.00,4.1,10608 );
+INSERT INTO BookData VALUES ('553575104','9780553575101','In Pursuit of the Proper Sinner (Inspector Lynley  #10)','2000-11-30',718, 10, 10.00,4.1,10608 );
 INSERT INTO BookData VALUES ('736904948','9780736904940','A Woman''s High Calling Growth and Study Guide','2001-08-15',160, 10, 10.00,4.15,13 );
 INSERT INTO BookData VALUES ('736908161','9780736908160','Living with Passion and Purpose: Luke (Woman After God''s Own Heart)','2005-09-15',160, 10, 10.00,4,22 );
 INSERT INTO BookData VALUES ('736913823','9780736913829','Loving God with All Your Mind','2005-01-01',304, 10, 10.00,4.43,1488 );
@@ -11096,7 +11096,7 @@ INSERT INTO BookData VALUES ('1594860165','9781594860164','Live Rich  Die Broke'
 INSERT INTO BookData VALUES ('66619912','9780066619910','The Die Broke Financial Problem Solver','2000-12-26',272, 10, 10.00,2.33,3 );
 INSERT INTO BookData VALUES ('394729641','9780394729640','Montaillou: The Promised Land of Error','1979-07-12',416, 10, 10.00,3.96,1142 );
 INSERT INTO BookData VALUES ('140137009','9780140137002','Montaillou: Cathars and Catholics in a French Village 1294-1324','2002-12-05',400, 10, 10.00,3.96,80 );
-INSERT INTO BookData VALUES ('2070323285','9782070323289','Montaillou  village occitan de 1294 à 1324','1982-06-31',640, 10, 10.00,3.96,15 );
+INSERT INTO BookData VALUES ('2070323285','9782070323289','Montaillou  village occitan de 1294 à 1324','1982-06-30',640, 10, 10.00,3.96,15 );
 INSERT INTO BookData VALUES ('140054715','9780140054712','Montaillou: Cathars and Catholics in a French Village  1294-1324','1980-05-29',400, 10, 10.00,3.96,17 );
 INSERT INTO BookData VALUES ('142437255','9780142437254','On the Road','2006-01-03',307, 10, 10.00,3.63,3271 );
 INSERT INTO BookData VALUES ('074347788X','9780743477888','Undaunted Courage: The Pioneering First Mission to Explore America''s Wild Frontier','2003-10-06',592, 10, 10.00,4.21,41236 );

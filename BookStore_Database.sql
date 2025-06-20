@@ -20,9 +20,9 @@ CREATE TABLE Book_Language (isbn13 CHAR(13),languages varchar(255),  primary key
 
 CREATE TABLE Customers (customerID BIGINT AUTO_INCREMENT NOT NULL, username varchar(255) NOT NULL, fname varchar(255) NOT NULL, lname varchar(255) NOT NULL, password varchar(255) NOT NULL, address varchar(255) NOT NULL, phoneNumber varchar(15) NOT NULL, PRIMARY KEY(customerID)); 
 
-CREATE TABLE Orders (customerID BIGINT NOT NULL, orderID BIGINT NOT NULL, total DOUBLE(65,2) NOT NULL, dateOrdered DATE NOT NULL, PRIMARY KEY(orderID, customerID), FOREIGN KEY (customerID) REFERENCES Customers (customerID)); 
+CREATE TABLE Orders (customerID BIGINT NOT NULL, orderID BIGINT unique NOT NULL, total DOUBLE(65,2) NOT NULL, dateOrdered DATE NOT NULL, PRIMARY KEY(orderID, customerID), FOREIGN KEY (customerID) REFERENCES Customers (customerID)); 
 
-CREATE TABLE OrderContents (orderID BIGINT, isbn13 char(13), amount int, primary key (orderID, isbn13),FOREIGN KEY (orderID) REFERENCES Orders(orderID), FOREIGN KEY (isbn13) REFERENCES BookData(isbn13)); 
+CREATE TABLE OrderContents (orderID BIGINT NOT NULL, isbn13 char(13), amount int, primary key (orderID, isbn13),FOREIGN KEY (orderID) REFERENCES Orders(orderID), FOREIGN KEY (isbn13) REFERENCES BookData(isbn13)); 
 
 CREATE TABLE Reviews (customerID BIGINT NOT NULL, reviewID BIGINT unique NOT NULL auto_increment, commentText varchar(255), rating INT not null, isbn13 CHAR(13) NOT NULL, PRIMARY KEY(customerID, reviewID, isbn13), FOREIGN KEY (customerID) REFERENCES Customers(customerID), FOREIGN KEY(isbn13) REFERENCES BookData(isbn13)); 
 
